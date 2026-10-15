@@ -1,0 +1,37 @@
+{
+  "Как настроить работу с OBB датасетами и чем они отличаются от стандартного формата сегментации?": [
+    "docs\\datasets\\obb\\index.md",
+    "docs\\tasks\\obb.md"
+  ],
+  "Что делать, если при запуске валидации на CUDA падает ошибка Out of Memory?": [
+    "docs\\modes\\train.md",
+    "docs\\platform\\index.md",
+    "docs\\guides\\yolo-common-issues.md",
+    "docs\\platform\\train\\cloud-training.md"
+  ],
+  "Как запустить инференс на весах ONNX с сохранением результатов в TXT, но без отображения окон на экране?": [
+    "docs\\integrations\\onnx.md",
+    "docs\\integrations\\amd.md",
+    "docs\\guides\\deepstream-nvidia-jetson.md"
+  ],
+  "Где физически на диске лежат дефолтные конфигурационные файлы для предобученных моделей в репозитории?": [
+    "docs\\usage\\cfg.md",
+    "docs\\tasks\\pose.md",
+    "docs\\platform\\train\\cloud-training.md",
+    "docs\\datasets\\semantic\\index.md"
+  ],
+  "Как заставить нейросеть предсказывать объекты на лету прямо с веб-камеры компьютера?": [
+    "docs\\modes\\predict.md",
+    "docs\\modes\\index.md",
+    "docs\\platform\\deploy\\inference.md",
+    "docs\\platform\\quickstart.md",
+    "docs\\platform\\train\\models.md"
+  ],
+  "Как настроить обучение модели YOLO?": [
+    "docs\\usage\\cfg.md",
+    "docs\\guides\\hyperparameter-tuning.md",
+    "docs\\modes\\index.md",
+    "docs\\index.md"
+  ],
+  "Для чего используется движок ollama?": []
+}

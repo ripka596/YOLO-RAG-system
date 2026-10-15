@@ -1,0 +1,57 @@
+{
+  "Как настроить работу с OBB датасетами и чем они отличаются от стандартного формата сегментации?": [
+    "docs\\datasets\\index.md",
+    "docs\\datasets\\obb\\index.md",
+    "docs\\guides\\data-collection-and-annotation.md",
+    "docs\\tasks\\obb.md"
+  ],
+  "Что делать, если при запуске валидации на CUDA падает ошибка Out of Memory?": [
+    "docs\\guides\\yolo-common-issues.md",
+    "docs\\modes\\predict.md",
+    "docs\\modes\\train.md",
+    "docs\\platform\\index.md",
+    "docs\\platform\\train\\cloud-training.md"
+  ],
+  "Как запустить инференс на весах ONNX с сохранением результатов в TXT, но без отображения окон на экране?": [
+    "docs\\guides\\deepstream-nvidia-jetson.md",
+    "docs\\integrations\\amd.md",
+    "docs\\integrations\\mnn.md",
+    "docs\\integrations\\onnx.md",
+    "docs\\integrations\\xilinx.md"
+  ],
+  "Где физически на диске лежат дефолтные конфигурационные файлы для предобученных моделей в репозитории?": [
+    "docs\\datasets\\depth\\hypersim.md",
+    "docs\\datasets\\depth\\tartanair.md",
+    "docs\\datasets\\depth\\vkitti2.md",
+    "docs\\datasets\\semantic\\index.md",
+    "docs\\integrations\\weights-biases.md",
+    "docs\\modes\\benchmark.md",
+    "docs\\platform\\api\\index.md",
+    "docs\\platform\\integrations\\on-premise.md",
+    "docs\\platform\\train\\cloud-training.md",
+    "docs\\tasks\\pose.md"
+  ],
+  "Как заставить нейросеть предсказывать объекты на лету прямо с веб-камеры компьютера?": [
+    "docs\\index.md",
+    "docs\\modes\\index.md",
+    "docs\\platform\\deploy\\inference.md",
+    "docs\\platform\\quickstart.md",
+    "docs\\platform\\train\\models.md",
+    "docs\\tasks\\obb.md"
+  ],
+  "Как настроить обучение модели YOLO?": [
+    "docs\\datasets\\classify\\index.md",
+    "docs\\guides\\hyperparameter-tuning.md",
+    "docs\\index.md",
+    "docs\\models\\index.md",
+    "docs\\modes\\index.md",
+    "docs\\usage\\cfg.md"
+  ],
+  "Для чего используется движок ollama?": [
+    "docs\\integrations\\ncnn.md",
+    "docs\\integrations\\openvino.md",
+    "docs\\models\\index.md",
+    "docs\\models\\llm.md",
+    "docs\\platform\\train\\autotrain.md"
+  ]
+}
