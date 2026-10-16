@@ -21,14 +21,14 @@ Retrieval-Augmented Generation для поиска по официальной �
     ```
     FROM ./путь_к_файлу/model-name.gguf
     ```
-    - Импортировать модель в Ollama
+    - Импортировать модель в Ollama:
     `ollama create qwen3_5 -f ./Modelfile`
 
 3. Скачать документацию и построить индексы:
-   python updateData.py
+   `python updateData.py`
 
 4. Запустить веб-интерфейс:
-   python main.py
+   `python main.py`
 
 ## Структура
 - `main.py` - RAG-пайплайн + Gradio
