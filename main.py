@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer, CrossEncoder
 import re, pickle, numpy as np
+from itertools import chain
 import ollama
 import chromadb
 import torch
@@ -78,29 +79,35 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
     Используется реранкер
     """
     top_k = 5 # количество документов в контекст
+
+    vec_ids, vec_docs, vec_meta, vec_dists = [], [], [], []
+    bm_ids, bm_docs, bm_meta, bm_scores = [], [], [], []
+    if mode != "bm25":
     # Векторный поиск
-    query_vector = embedder.encode(user_question).tolist()
-    vector_results = collection.query(
-        query_embeddings=[query_vector],
-        n_results=n_results
-    )
+        query_vector = embedder.encode(user_question).tolist()
 
-    vec_ids, vec_docs, vec_meta, vec_dists = vector_results['ids'][0], vector_results['documents'][0], vector_results['metadatas'][0], vector_results['distances'][0]
+        vector_results = collection.query(
+            query_embeddings=[query_vector],
+            n_results=n_results
+        )
 
+        vec_ids, vec_docs, vec_meta, vec_dists = vector_results['ids'][0], vector_results['documents'][0], vector_results['metadatas'][0], vector_results['distances'][0]
+
+    if mode != "vector":
     # поиск BM25
-    words_query = re.findall(r'\w+', user_question.lower()) #вопрос пользователя по словам
-    bm25_all_scores = bm25_model.get_scores(words_query)
-    bm25_results = np.argsort(-bm25_all_scores)[:n_results]
+        words_query = re.findall(r'\w+', user_question.lower()) #вопрос пользователя по словам
+        bm25_all_scores = bm25_model.get_scores(words_query)
+        bm25_results = np.argsort(-bm25_all_scores)[:n_results]
 
-    bm_ids, bm_docs, bm_meta, bm_scores = [bm25_ids[i] for i in bm25_results], [bm25_docs[i] for i in bm25_results], [bm25_meta[i] for i in bm25_results], [bm25_all_scores[i] for i in bm25_results]
+        bm_ids, bm_docs, bm_meta, bm_scores = [bm25_ids[i] for i in bm25_results], [bm25_docs[i] for i in bm25_results], [bm25_meta[i] for i in bm25_results], [bm25_all_scores[i] for i in bm25_results]
 
     match mode:
         case "concatenate":
-            all_ids = vec_ids + bm_ids
+            all_ids = list(chain.from_iterable(zip(vec_ids, bm_ids)))
         case "rrf":
-            all_ids = rrf(vec_ids, bm_ids)[:15]
+            all_ids = rrf(vec_ids, bm_ids)
         case "score":
-            all_ids = score_fusion(vec_ids, vec_dists, bm_ids, bm_scores)[:15]
+            all_ids = score_fusion(vec_ids, vec_dists, bm_ids, bm_scores)
         case "vector":
             all_ids = vec_ids
         case "bm25":
@@ -131,10 +138,15 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
     if not use_reranker:
         results = [(unique_docs[i], unique_meta[i]) for i in range(min(top_k, len(unique_docs)))]
     else:
-        pairs = [[user_question, doc] for doc in unique_docs]
+        rerank_docs = unique_docs[:15]
+        rerank_meta = unique_meta[:15]
+
+        pairs = [[user_question, doc] for doc in rerank_docs]
         scores = reranker.predict(pairs)
+
         reranked_results = np.argsort(-np.array(scores))[:top_k]
-        results = [(unique_docs[i], unique_meta[i]) for i in reranked_results]
+
+        results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
     return results
 
 def rag_query(user_question: str, history: list):
