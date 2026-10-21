@@ -36,6 +36,7 @@ Retrieval-Augmented Generation для поиска по официальной �
 - `src/ingest_bm25.py` - построение BM25-индекса
 - `src/updateData.py` - скачивание документации и построение индексов
 - `src/metrics.py` - Генерация тестового датасета и расчёт метрик
+- `metrics/` - ground_truth и таблицы с результатами
 
 ## Метрики
 ![Таблица метрик](table.png)
