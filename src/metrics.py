@@ -1,5 +1,5 @@
 import json, time, os, random, pandas as pd, ollama
-from main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
+from src.main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
 
 GROUND_TRUTH = "ground_truth.json"
 N_QUESTIONS = 25

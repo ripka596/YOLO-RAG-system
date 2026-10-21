@@ -156,7 +156,7 @@ def rag_query(user_question: str, history: list):
     RAG-пайплайн с функцией гибридного поиска
     """
     try:
-        documentation = hybrid_search(user_question, n_results=25)
+        documentation = hybrid_search(user_question, n_results=25, mode="score", score_threshold=0)
 
         if not documentation:
             return "Не найдено результатов"

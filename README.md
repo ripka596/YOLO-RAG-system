@@ -25,24 +25,30 @@ Retrieval-Augmented Generation для поиска по официальной �
     `ollama create qwen3_5 -f ./Modelfile`
 
 3. Скачать документацию и построить индексы:
-   `python updateData.py`
+   `python src/updateData.py`
 
 4. Запустить веб-интерфейс:
-   `python main.py`
+   `python src/main.py`
 
 ## Структура
-- `main.py` - RAG-пайплайн + Gradio
-- `ingest.py` - чанкинг и загрузка в ChromaDB
-- `ingest_bm25.py` - построение BM25-индекса
-- `updateData.py` - скачивание документации и построение индексов
-- `tests.py` - прогон конфигураций
+- `src/main.py` - RAG-пайплайн + Gradio
+- `src/ingest.py` - чанкинг и загрузка в ChromaDB
+- `src/ingest_bm25.py` - построение BM25-индекса
+- `src/updateData.py` - скачивание документации и построение индексов
+- `src/metrics.py` - Генерация тестового датасета и расчёт метрик
 
 ## Метрики
-| **Метод** | **Recall@5** | **MRR** |
-| --- | --- | --- |
-| RRF + rerank | 0.644 | 0.917 |
-| Score + rerank | 0.658 | 0.867 |
-| Concatenate + rerank | 0.661 | 0.833 |
+![Таблица метрик](table.png)
 
-### Смена метода производится в `main.py` в функции `hybrid_search()`
-### Параметр - `mode="rrf"`, доступны "rrf", "concatenate", "score"
+## Настройка поиска в `main.py` (`hybrid_search()`)
+- `n_results` - количество чанков для поиска
+- `mode`: `"rrf"`, `"concatenate"`, `"score"`, `"vector"`, `"bm25"`
+- `use_reranker`: `True` / `False` - параметр использования реранкера (топ-15 кандидатов)
+- `score_threshold`: `None` / `k` - отсечение по скору реранкера (По умолчанию - выключено (`None`) - используется top-k (5). `k` - значение для отсечения)
+
+### Стандартная настройка
+`main.py` использует следующие параметры поиска по умолчанию (`rag_query()`):
+- `n_results`: 25
+- `mode`: score
+- `use_reranker`: True
+- `score_threshold`: 0
