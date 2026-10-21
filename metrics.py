@@ -1,9 +1,21 @@
 import json, time, os, random, pandas as pd, ollama
 from main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
-from tests import configs
 
 GROUND_TRUTH = "ground_truth.json"
 N_QUESTIONS = 25
+
+configs = [
+    ("vector", False),
+    ("vector", True),
+    ("bm25", False),
+    ("bm25", True),
+    ("rrf", False),
+    ("rrf", True),
+    ("concatenate", False),
+    ("concatenate", True),
+    ("score", False),
+    ("score", True),
+]
 
 
 def calc_metrics(chunks: list, ground_truth: list, k: int = 5):
@@ -33,7 +45,7 @@ def calc_metrics(chunks: list, ground_truth: list, k: int = 5):
     return round(recall, 3), round(rr, 3)
 
 def gen_dataset(num_q: int = N_QUESTIONS):
-    """Генерация вопроса на чанк и точный спан для ответа"""
+    """Генерация вопроса на чанк и точная цитата для ответа"""
     docs = [i for i, doc in enumerate(bm25_docs) if doc and len(doc.strip()) > 300 and bm25_meta[i]]
 
     random.seed(33)
@@ -99,7 +111,7 @@ if __name__ == "__main__":
         hybrid_search(dataset[0]["question"], n_results = 25)
     
     rows = []
-    for mode, reranker in configs: #конфиги импортируем из tests
+    for mode, reranker in configs:
         label = f"{mode}{' + rerank' if reranker else ''}"
         recalls, rrs, times = [], [], []
 

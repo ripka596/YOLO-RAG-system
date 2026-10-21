@@ -1,37 +1,227 @@
-{
-  "Как настроить работу с OBB датасетами и чем они отличаются от стандартного формата сегментации?": [
-    "docs\\datasets\\obb\\index.md",
-    "docs\\tasks\\obb.md"
-  ],
-  "Что делать, если при запуске валидации на CUDA падает ошибка Out of Memory?": [
-    "docs\\modes\\train.md",
-    "docs\\platform\\index.md",
-    "docs\\guides\\yolo-common-issues.md",
-    "docs\\platform\\train\\cloud-training.md"
-  ],
-  "Как запустить инференс на весах ONNX с сохранением результатов в TXT, но без отображения окон на экране?": [
-    "docs\\integrations\\onnx.md",
-    "docs\\integrations\\amd.md",
-    "docs\\guides\\deepstream-nvidia-jetson.md"
-  ],
-  "Где физически на диске лежат дефолтные конфигурационные файлы для предобученных моделей в репозитории?": [
-    "docs\\usage\\cfg.md",
-    "docs\\tasks\\pose.md",
-    "docs\\platform\\train\\cloud-training.md",
-    "docs\\datasets\\semantic\\index.md"
-  ],
-  "Как заставить нейросеть предсказывать объекты на лету прямо с веб-камеры компьютера?": [
-    "docs\\modes\\predict.md",
-    "docs\\modes\\index.md",
-    "docs\\platform\\deploy\\inference.md",
-    "docs\\platform\\quickstart.md",
-    "docs\\platform\\train\\models.md"
-  ],
-  "Как настроить обучение модели YOLO?": [
-    "docs\\usage\\cfg.md",
-    "docs\\guides\\hyperparameter-tuning.md",
-    "docs\\modes\\index.md",
-    "docs\\index.md"
-  ],
-  "Для чего используется движок ollama?": []
-}
+[
+  {
+    "question": "Что представляет собой оптимизатор MuSGD в YOLO26?",
+    "ground_truth": [
+      {
+        "source": "docs\\modes\\train.md",
+        "span": "In YOLO26, **MuSGD** is a hybrid optimizer that combines standard **SGD** updates with **Muon-style orthogonalized updates**."
+      }
+    ]
+  },
+  {
+    "question": "Какая компьютерная задача подходит для медицинского изображения?",
+    "ground_truth": [
+      {
+        "source": "docs\\guides\\steps-of-a-cv-project.md",
+        "span": "Image segmentation is suitable for medical imaging because it provides accurate and detailed boundaries of tumors that are crucial for assessing size, shape, and treatment planning."
+      }
+    ]
+  },
+  {
+    "question": "Как настроить кастомный тренировщик для детекции, если модель не поддерживается напрямую?",
+    "ground_truth": [
+      {
+        "source": "docs\\usage\\engine.md",
+        "span": "To train a custom detection model not directly supported, overload the existing `get_model` functionality:\n\n```python\nfrom ultralytics.models.yolo.detect import DetectionTrainer\n\n\nclass CustomTrainer(DetectionTrainer):\n    def get_model(self, cfg=None, weights=None, verbose=True):\n        \"\"\"Loads a custom detection model given configuration and weight files.\"\"\"\n\n\ntrainer = CustomTrainer(overrides={...})\ntrainer.train()\n```"
+      }
+    ]
+  },
+  {
+    "question": "Для чего рекомендуется использовать named returns в документации?",
+    "ground_truth": [
+      {
+        "source": "docs\\help\\contributing.md",
+        "span": "Using named returns can make your code more self-documenting and easier to understand, especially for complex functions."
+      }
+    ]
+  },
+  {
+    "question": "Какие ограничения по количеству объектов и размеру файлов существуют при импорте в набор данных?",
+    "ground_truth": [
+      {
+        "source": "docs\\platform\\integrations\\azure-blob-storage.md",
+        "span": "A single import indexes up to 500,000 blobs, and label or YAML files up to 1 MB each."
+      }
+    ]
+  },
+  {
+    "question": "Какие альтернативные методы настройки предлагаются в документации?",
+    "ground_truth": [
+      {
+        "source": "docs\\yolov5\\environments\\docker-image-quickstart-tutorial.md",
+        "span": "For alternative setup methods, consider our [Colab Notebook](https://colab.research.google.com/github/ultralytics/yolov5/blob/master/tutorial.ipynb) <a href=\"https://colab.research.google.com/github/ultralytics/yolov5/blob/master/tutorial.ipynb\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"></a> <a href=\"https://www.kaggle.com/models/ultralytics/yolov5\"><img src=\"https://kaggle.com/static/images/open-in-kaggle.svg\" alt=\"Open In Kaggle\"></a>, [GCP Deep Learning VM](./google-cloud-quickstart-tutorial.md), or [Amazon AWS](./aws-quickstart-tutorial.md) guides."
+      }
+    ]
+  },
+  {
+    "question": "Для каких целей предназначен этот набор данных?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\depth\\imagenet-pseudo.md",
+        "span": "Used purely for knowledge distillation and scene/object diversity, not as a benchmark."
+      }
+    ]
+  },
+  {
+    "question": "Как запустить обучение модели YOLO26n-Depth на Virtual KITTI 2 с размером изображения 640?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\depth\\vkitti2.md",
+        "span": "```python\nfrom ultralytics import YOLO\n\n# Load a model\nmodel = YOLO(\"yolo26n-depth.pt\")  # load a pretrained model (recommended for training)\n\n# Train the model\nresults = model.train(data=\"depth-vkitti2.yaml\", epochs=100, imgsz=640)\n```"
+      }
+    ]
+  },
+  {
+    "question": "Под какой лицензией разработан и выпущен датасет Construction-PPE?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\detect\\construction-ppe.md",
+        "span": "Construction-PPE is developed and released under the [AGPL-3.0 License](https://github.com/ultralytics/ultralytics/blob/main/LICENSE), supporting open-source research and commercial applications with proper attribution."
+      }
+    ]
+  },
+  {
+    "question": "Как настроить точку наблюдения для функции VisionEye?",
+    "ground_truth": [
+      {
+        "source": "docs\\guides\\vision-eye.md",
+        "span": "Set `vision_point` to the observer's pixel coordinates"
+      }
+    ]
+  },
+  {
+    "question": "Для чего предназначен датасет Carparts-seg?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\segment\\index.md",
+        "span": "A specialized dataset focused on the segmentation of car parts, ideal for automotive applications."
+      }
+    ]
+  },
+  {
+    "question": "Как запустить обучение модели YOLO26n на датасете COCO8-Multispectral с помощью командной строки?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\detect\\coco8-multispectral.md",
+        "span": "yolo detect train data=coco8-multispectral.yaml model=yolo26n.pt epochs=100 imgsz=640"
+      }
+    ]
+  },
+  {
+    "question": "Что возвращает YOLO instance segmentation для каждого изображения?",
+    "ground_truth": [
+      {
+        "source": "docs\\tasks\\segment.md",
+        "span": "YOLO instance segmentation returns one `Results` object per image."
+      }
+    ]
+  },
+  {
+    "question": "Как цитировать набор данных xView в исследованиях?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\detect\\xview.md",
+        "span": "Cite the paper \"xView: Objects in Context in Overhead Imagery\" (Lam et al., arXiv:1802.07856, 2018); the full BibTeX entry is in the [Citations and Acknowledgments](#citations-and-acknowledgments) section above."
+      }
+    ]
+  },
+  {
+    "question": "Какие задачи решает ClearML в рамках Ultralytics?",
+    "ground_truth": [
+      {
+        "source": "docs\\integrations\\index.md",
+        "span": "Automate your Ultralytics ML workflows, monitor experiments, and foster team collaboration."
+      }
+    ]
+  },
+  {
+    "question": "Сколько классов в наборе данных COCO-Pose?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\pose\\index.md",
+        "span": "- **Number of Classes**: 1 (person)."
+      }
+    ]
+  },
+  {
+    "question": "Как рекомендуется использовать преобученные веса для специализированных датасетов?",
+    "ground_truth": [
+      {
+        "source": "docs\\yolov5\\tutorials\\tips-for-best-training-results.md",
+        "span": "For specialized datasets, start with pretrained weights and optionally [freeze layers](transfer-learning-with-frozen-layers.md) with `--freeze` to adapt the model to your specific task."
+      }
+    ]
+  },
+  {
+    "question": "Какая работа и её авторы указаны в разделе Citations and Acknowledgments?",
+    "ground_truth": [
+      {
+        "source": "docs\\models\\fast-sam.md",
+        "span": "```bibtex\n@misc{zhao2023fast,\n      title={Fast Segment Anything},\n      author={Xu Zhao and Wenchao Ding and Yongqi An and Yinglong Du and Tao Yu and Min Li and Ming Tang and Jinqiao Wang},\n      year={2023},\n      eprint={2306.12156},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV}\n}\n```"
+      }
+    ]
+  },
+  {
+    "question": "Как интегрировать Comet с Ultralytics YOLO26 для обучения?",
+    "ground_truth": [
+      {
+        "source": "docs\\integrations\\comet.md",
+        "span": "To integrate Comet with Ultralytics YOLO26, follow these steps:"
+      }
+    ]
+  },
+  {
+    "question": "Какие поля необходимо указать в dataset YAML для настройки полигональных меток?",
+    "ground_truth": [
+      {
+        "source": "docs\\datasets\\semantic\\index.md",
+        "span": "Create a dataset YAML with `path`, `train`, `val`, and `names` — **omit** `masks_dir`."
+      }
+    ]
+  },
+  {
+    "question": "Сколько слоев и параметров имеет модель?",
+    "ground_truth": [
+      {
+        "source": "docs\\yolov5\\tutorials\\model-pruning-and-sparsity.md",
+        "span": "Model Summary: 444 layers, 86705005 parameters, 0 gradients"
+      }
+    ]
+  },
+  {
+    "question": "Для чего используется Benchmark mode?",
+    "ground_truth": [
+      {
+        "source": "docs\\usage\\python.md",
+        "span": "[Benchmark mode](../modes/benchmark.md) is used to profile the speed and accuracy of various export formats for YOLO."
+      }
+    ]
+  },
+  {
+    "question": "Как изолировать объект с черным фоном?",
+    "ground_truth": [
+      {
+        "source": "docs\\guides\\isolating-segmentation-objects.md",
+        "span": "# Isolate object with a black background\n        mask3ch = cv2.cvtColor(b_mask, cv2.COLOR_GRAY2BGR)\n        isolated = cv2.bitwise_and(mask3ch, img)"
+      }
+    ]
+  },
+  {
+    "question": "Для чего предназначен формат YOLO26 ExecuTorch?",
+    "ground_truth": [
+      {
+        "source": "docs\\integrations\\executorch.md",
+        "span": "Export YOLO26 models to ExecuTorch format for efficient on-device inference on mobile and edge devices."
+      }
+    ]
+  },
+  {
+    "question": "Что происходит с выбором датасета, если параметр `data` опущен при `quantize=8` или `'w8a16'`?",
+    "ground_truth": [
+      {
+        "source": "docs\\integrations\\tfjs.md",
+        "span": "If omitted with `quantize=8` or `'w8a16'`, Ultralytics selects the default calibration dataset for the model task."
+      }
+    ]
+  }
+]
