@@ -5,16 +5,21 @@ GROUND_TRUTH = "ground_truth.json"
 N_QUESTIONS = 25
 
 configs = [
-    ("vector", False),
-    ("vector", True),
-    ("bm25", False),
-    ("bm25", True),
-    ("rrf", False),
-    ("rrf", True),
-    ("concatenate", False),
-    ("concatenate", True),
-    ("score", False),
-    ("score", True),
+    ("vector", False, None),
+    ("vector", True, None),
+    ("vector", True, 0),
+    ("bm25", False, None),
+    ("bm25", True, None),
+    ("bm25", True, 0),
+    ("rrf", False, None),
+    ("rrf", True, None),
+    ("rrf", True, 0),
+    ("concatenate", False, None),
+    ("concatenate", True, None),
+    ("concatenate", True, 0),
+    ("score", False, None),
+    ("score", True, None),
+    ("score", True, 0),
 ]
 
 
@@ -110,25 +115,28 @@ if __name__ == "__main__":
     for _ in range(3): #прогрев
         hybrid_search(dataset[0]["question"], n_results = 25)
     
-    rows = []
-    for mode, reranker in configs:
-        label = f"{mode}{' + rerank' if reranker else ''}"
-        recalls, rrs, times = [], [], []
+    results = {}
+    for mode, reranker, threshold in configs:
+        label = f"{mode}{' + rerank' if reranker else ''}{' (score >=0)' if threshold is not None else ''}"
+        recalls, rrs, times, counts = [], [], [], []
 
         for item in dataset:
             start = time.perf_counter()
-            chunks = hybrid_search(item["question"], n_results=25, mode=mode, use_reranker=reranker)
+            chunks = hybrid_search(item["question"], n_results=25, mode=mode, use_reranker=reranker, score_threshold=threshold)
             times.append(time.perf_counter() - start)
+            counts.append(len(chunks))
 
             recall, rr = calc_metrics(chunks, item["ground_truth"])
             recalls.append(recall)
             rrs.append(rr)
-        rows.append(
-            {
-                "Метод": label,
+
+        results[label] = {
                 "Recall@5": round(sum(recalls) / len(recalls), 3),
                 "MRR": round(sum(rrs) / len(rrs), 3),
-                "Время": round(sum(times) / len(times), 4)
+                "Avg chunks": round(sum(counts) / len (counts), 1),
+                "Время (s)": round(sum(times) / len(times), 4)
             }
-        )
-    pd.DataFrame(rows).to_csv("metrics.results.csv", index=False, encoding="utf-8-sig")
+    df = pd.DataFrame(results)
+
+    df.to_csv("metrics_results.csv", index_label="Метрика", encoding="utf-8-sig")
+    df.to_excel("metrics_results.xlsx", index_label="Метрика")

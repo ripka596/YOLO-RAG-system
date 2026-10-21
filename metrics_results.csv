@@ -1,0 +1,5 @@
+﻿Метрика,vector,vector + rerank,vector + rerank (score >=0),bm25,bm25 + rerank,bm25 + rerank (score >=0),rrf,rrf + rerank,rrf + rerank (score >=0),concatenate,concatenate + rerank,concatenate + rerank (score >=0),score,score + rerank,score + rerank (score >=0)
+Recall@5,0.6,0.8,0.8,0.28,0.44,0.44,0.52,0.64,0.64,0.56,0.64,0.64,0.56,0.68,0.68
+MRR,0.451,0.57,0.57,0.135,0.303,0.303,0.368,0.473,0.473,0.416,0.473,0.473,0.401,0.515,0.515
+Avg chunks,5.0,5.0,4.8,5.0,5.0,3.2,5.0,5.0,4.7,5.0,5.0,4.7,5.0,5.0,4.6
+Время (s),0.0561,0.1956,0.1958,0.0085,0.172,0.1792,0.0623,0.2378,0.236,0.0722,0.2342,0.2226,0.0635,0.2186,0.2347
