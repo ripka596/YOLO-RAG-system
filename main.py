@@ -66,7 +66,7 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True):
+def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None):
     """
     Гибридный поиск BM25 + векторный
     mode:
@@ -145,8 +145,10 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
         scores = reranker.predict(pairs)
 
         reranked_results = np.argsort(-np.array(scores))[:top_k]
-
-        results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
+        if score_threshold is not None:
+            results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results if scores[i] >= score_threshold]
+        else:
+            results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
     return results
 
 def rag_query(user_question: str, history: list):
