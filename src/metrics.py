@@ -1,7 +1,7 @@
 import json, time, os, random, pandas as pd, ollama
 from src.main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
 
-GROUND_TRUTH = "ground_truth.json"
+GROUND_TRUTH = "metrics/ground_truth.json"
 N_QUESTIONS = 25
 
 configs = [
@@ -138,5 +138,5 @@ if __name__ == "__main__":
             }
     df = pd.DataFrame(results)
 
-    df.to_csv("metrics_results.csv", index_label="Метрика", encoding="utf-8-sig")
-    df.to_excel("metrics_results.xlsx", index_label="Метрика")
+    df.to_csv("metrics/metrics_results.csv", index_label="Метрика", encoding="utf-8-sig")
+    df.to_excel("metrics/metrics_results.xlsx", index_label="Метрика")
