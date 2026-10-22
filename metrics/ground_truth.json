@@ -54,7 +54,7 @@
     ]
   },
   {
-    "question": "Для каких целей предназначен этот набор данных?",
+    "question": "Для каких целей предназначен датасет ImageNet-Pseudo?",
     "ground_truth": [
       {
         "source": "docs\\datasets\\depth\\imagenet-pseudo.md",
@@ -153,7 +153,7 @@
     ]
   },
   {
-    "question": "Какая работа и её авторы указаны в разделе Citations and Acknowledgments?",
+    "question": "Какая работа и её авторы указаны в разделе Citations модели FastSAM?",
     "ground_truth": [
       {
         "source": "docs\\models\\fast-sam.md",
@@ -166,7 +166,7 @@
     "ground_truth": [
       {
         "source": "docs\\integrations\\comet.md",
-        "span": "To integrate Comet with Ultralytics YOLO26, follow these steps:"
+        "span": "1. **Install the required packages**:\n\n    ```bash\n    pip install ultralytics comet_ml\n    ```\n\n2. **Set up your Comet API Key**:\n\n    ```bash\n    export COMET_API_KEY=YOUR_API_KEY\n    ```"
       }
     ]
   },
@@ -180,7 +180,7 @@
     ]
   },
   {
-    "question": "Сколько слоев и параметров имеет модель?",
+    "question": "Сколько слоёв и параметров у модели YOLOv5 при pruning?",
     "ground_truth": [
       {
         "source": "docs\\yolov5\\tutorials\\model-pruning-and-sparsity.md",

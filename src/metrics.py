@@ -1,8 +1,9 @@
-import json, time, os, random, pandas as pd, ollama
-from src.main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
+import json, time, os, statistics, random, pandas as pd, ollama
+from main import hybrid_search, LLM_MODEL_NAME, bm25_docs, bm25_meta
 
 GROUND_TRUTH = "metrics/ground_truth.json"
 N_QUESTIONS = 25
+N_RUNS = 3
 
 configs = [
     ("vector", False, None),
@@ -25,14 +26,14 @@ configs = [
 
 def calc_metrics(chunks: list, ground_truth: list, k: int = 5):
     """Рассчёт Recall@5 и RR для одного вопроса по совпадениям чанков."""
-    top_k = chunks[:k]
+    chunks = chunks[:k]
     if not ground_truth:
         return 0.0, 0.0
 
     matched_gt_indices = set()
     first_rank = 0
 
-    for rank, (doc, meta) in enumerate(top_k, start=1):
+    for rank, (doc, meta) in enumerate(chunks, start=1):
         source = (meta.get("source", ""))
         text = " ".join((doc or "").lower().split())
 
@@ -40,7 +41,7 @@ def calc_metrics(chunks: list, ground_truth: list, k: int = 5):
             gt_source = gt["source"]
             gt_span = " ".join(gt["span"].lower().split())
 
-            if gt_span and source.endswith(gt_source) and gt_span in text:
+            if gt_span and source == gt_source and gt_span in text:
                 matched_gt_indices.add(idx)
                 if first_rank == 0:
                     first_rank = rank
@@ -54,11 +55,11 @@ def gen_dataset(num_q: int = N_QUESTIONS):
     docs = [i for i, doc in enumerate(bm25_docs) if doc and len(doc.strip()) > 300 and bm25_meta[i]]
 
     random.seed(33)
-    sampled = random.sample(docs, len(docs))
+    random.shuffle(docs)
 
     dataset = []
 
-    for idx in sampled:
+    for idx in docs:
         if len(dataset) >= num_q:
             break
 
@@ -98,6 +99,7 @@ def gen_dataset(num_q: int = N_QUESTIONS):
                 )
 
         except Exception as e:
+            print(f"Ошибка генерации для чанка {idx}: {e}")
             continue
 
     with open(GROUND_TRUTH, "w", encoding="utf-8") as f:
@@ -112,31 +114,40 @@ if __name__ == "__main__":
     else:
         dataset = gen_dataset(N_QUESTIONS)
 
-    for _ in range(3): #прогрев
-        hybrid_search(dataset[0]["question"], n_results = 25)
+    warmup_q = dataset[0]["question"]
     
     results = {}
     for mode, reranker, threshold in configs:
         label = f"{mode}{' + rerank' if reranker else ''}{' (score >=0)' if threshold is not None else ''}"
+
+        for _ in range(3):
+            hybrid_search(warmup_q, n_results=25, mode=mode, use_reranker=reranker, score_threshold=threshold)
+
         recalls, rrs, times, counts = [], [], [], []
 
         for item in dataset:
-            start = time.perf_counter()
             chunks = hybrid_search(item["question"], n_results=25, mode=mode, use_reranker=reranker, score_threshold=threshold)
-            times.append(time.perf_counter() - start)
-            counts.append(len(chunks))
-
             recall, rr = calc_metrics(chunks, item["ground_truth"])
             recalls.append(recall)
             rrs.append(rr)
+            counts.append(len(chunks))
+
+            for _ in range(N_RUNS):
+                start = time.perf_counter()
+                hybrid_search(item["question"], n_results=25, mode=mode, use_reranker=reranker, score_threshold=threshold)
+                times.append(time.perf_counter() - start)
+
+        avg_time = round(sum(times) / len(times), 4)
+        std_time = round((statistics.stdev(times) if len(times) > 1 else 0.0), 4)
 
         results[label] = {
                 "Recall@5": round(sum(recalls) / len(recalls), 3),
                 "MRR": round(sum(rrs) / len(rrs), 3),
-                "Avg chunks": round(sum(counts) / len (counts), 1),
-                "Время (s)": round(sum(times) / len(times), 4)
+                "Avg chunks": round(sum(counts) / len(counts), 1),
+                "Время (s)": avg_time,
+                "Отклонение (s)": std_time
             }
+        
     df = pd.DataFrame(results)
-
     df.to_csv("metrics/metrics_results.csv", index_label="Метрика", encoding="utf-8-sig")
     df.to_excel("metrics/metrics_results.xlsx", index_label="Метрика")

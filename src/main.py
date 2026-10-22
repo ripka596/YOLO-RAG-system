@@ -66,7 +66,7 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None):
+def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 5, rerank_k = 15):
     """
     Гибридный поиск BM25 + векторный
     mode:
@@ -78,7 +78,6 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
     По умолчанию - RRF
     Используется реранкер
     """
-    top_k = 5 # количество документов в контекст
 
     vec_ids, vec_docs, vec_meta, vec_dists = [], [], [], []
     bm_ids, bm_docs, bm_meta, bm_scores = [], [], [], []
@@ -136,10 +135,10 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
         return []
 
     if not use_reranker:
-        results = [(unique_docs[i], unique_meta[i]) for i in range(min(top_k, len(unique_docs)))]
+        results = [(unique_docs[i], unique_meta[i]) for i in range(min(top_k, len(unique_docs[:rerank_k])))]
     else:
-        rerank_docs = unique_docs[:15]
-        rerank_meta = unique_meta[:15]
+        rerank_docs = unique_docs[:rerank_k]
+        rerank_meta = unique_meta[:rerank_k]
 
         pairs = [[user_question, doc] for doc in rerank_docs]
         scores = reranker.predict(pairs)
