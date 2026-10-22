@@ -41,11 +41,15 @@ Retrieval-Augmented Generation для поиска по официальной �
 ## Метрики
 ![Таблица метрик](table.png)
 
+Оптимальным значением параметров является: `reranker_k = 15, score>=6`, данная конфигурация демонстрирует значения Recall: 0.8 и MRR: 0.559 при AVG chunks: 5.6
+Подробнее в `metrics/sweep_metrics.xlsx (таблица 2)`
 ## Настройка поиска в `main.py` (`hybrid_search()`)
 - `n_results` - количество чанков для поиска
 - `mode`: `"rrf"`, `"concatenate"`, `"score"`, `"vector"`, `"bm25"`
 - `use_reranker`: `True` / `False` - параметр использования реранкера (топ-15 кандидатов)
 - `score_threshold`: `None` / `k` - отсечение по скору реранкера (По умолчанию - выключено (`None`) - используется top-k (5). `k` - значение для отсечения)
+- `top_k` - количество чанков после реранкера
+- `rerank_k` - количество чанков до реранкера
 
 ### Стандартная настройка
 `main.py` использует следующие параметры поиска по умолчанию (`rag_query()`):
@@ -53,3 +57,5 @@ Retrieval-Augmented Generation для поиска по официальной �
 - `mode`: score
 - `use_reranker`: True
 - `score_threshold`: 0
+- `top_k`: 5
+- `rerank_k`: 15
