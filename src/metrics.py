@@ -26,14 +26,14 @@ configs = [
 
 def calc_metrics(chunks: list, ground_truth: list, k: int = 5):
     """Рассчёт Recall@5 и RR для одного вопроса по совпадениям чанков."""
-    top_k = chunks[:k]
+    chunks = chunks[:k]
     if not ground_truth:
         return 0.0, 0.0
 
     matched_gt_indices = set()
     first_rank = 0
 
-    for rank, (doc, meta) in enumerate(top_k, start=1):
+    for rank, (doc, meta) in enumerate(chunks, start=1):
         source = (meta.get("source", ""))
         text = " ".join((doc or "").lower().split())
 
