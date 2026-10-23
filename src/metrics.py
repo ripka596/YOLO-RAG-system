@@ -9,6 +9,7 @@ configs = [
     ("vector", False, None),
     ("vector", True, None),
     ("vector", True, 0),
+    ("vector", True, 6),
     ("bm25", False, None),
     ("bm25", True, None),
     ("bm25", True, 0),
@@ -21,6 +22,7 @@ configs = [
     ("score", False, None),
     ("score", True, None),
     ("score", True, 0),
+    ("score", True, 6)
 ]
 
 
@@ -118,7 +120,7 @@ if __name__ == "__main__":
     
     results = {}
     for mode, reranker, threshold in configs:
-        label = f"{mode}{' + rerank' if reranker else ''}{' (score >=0)' if threshold is not None else ''}"
+        label = f"{mode}{' + rerank' if reranker else ''}{f' (score >={threshold})' if threshold is not None else ''}"
 
         for _ in range(3):
             hybrid_search(warmup_q, n_results=25, mode=mode, use_reranker=reranker, score_threshold=threshold)
