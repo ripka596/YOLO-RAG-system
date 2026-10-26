@@ -1,7 +1,7 @@
 import shutil, subprocess, os
 from pathlib import Path
-from src.ingest_bm25 import build_bm25
-from src.ingest import update_chromaDB
+from ingest_bm25 import build_bm25
+from ingest import update_chromaDB
 
 REPO_URL, DATA_DIR = "https://github.com/ultralytics/ultralytics.git", Path("data")
 
