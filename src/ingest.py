@@ -4,7 +4,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import chromadb
 import torch
 
-DATA_DIR = Path("docs")
+DATA_DIR = Path("data/docs")
 CHROMA_DB_DIR = Path("chroma_db")
 COLLECTION_NAME = "YOLOdocs"
 EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-0.6B"
