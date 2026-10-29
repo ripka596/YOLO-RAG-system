@@ -1,4 +1,4 @@
-import pickle, chromadb, torch
+import pickle, chromadb, torch, os
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 from ast_chunker import parse_code
@@ -82,6 +82,7 @@ def ingest_code():
     tokenized = [doc.lower().split() for doc in documents]
     bm25 = BM25Okapi(tokenized)
 
+    os.makedirs("bm25", exist_ok=True)
     with open(BM25_CODE, "wb") as f:
         pickle.dump({
             "bm25": bm25,

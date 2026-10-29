@@ -1,4 +1,4 @@
-import pickle, re, chromadb
+import pickle, re, chromadb, os
 from rank_bm25 import BM25Okapi
 
 CHROMA_DB_DIR = "chroma_db"
@@ -13,6 +13,7 @@ def build_bm25():
 
     bm25 = BM25Okapi([re.findall(r'\w+', d.lower()) for d in docs]) #каждый документ делим на слова
 
+    os.makedirs("bm25", exist_ok=True)
     with open(BM25_INDEX_PATH, "wb") as f: #пересоздаём файл индексов bm_25
         pickle.dump({
             'bm25': bm25,
