@@ -1,7 +1,7 @@
 import shutil, subprocess, os, stat
 from pathlib import Path
 from ingest_bm25 import build_bm25
-from ingest import update_chromaDB
+from ingest_data import update_chromaDB
 
 DATA_DIR = Path("data")
 DOCS_DIR = DATA_DIR / "docs"
@@ -77,5 +77,5 @@ if __name__ == "__main__":
     update_data()
     update_code_cpp()
     update_code_py()
-    #update_chromaDB()
-    #build_bm25()
+    update_chromaDB()
+    build_bm25()

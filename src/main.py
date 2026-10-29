@@ -5,10 +5,10 @@ import ollama
 import chromadb
 import torch
 import gradio as gr
+from router import get_route
 
 
 CHROMA_DB_DIR = "chroma_db"
-COLLECTION_NAME = "YOLOdocs"
 EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-0.6B"
 RERANK_MODEL_NAME = "Qwen/Qwen3-Reranker-0.6B"
 LLM_MODEL_NAME = "qwen3_5:latest"
@@ -19,15 +19,17 @@ embedder = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 reranker = CrossEncoder(RERANK_MODEL_NAME, device=device)
 
 client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
-collection = client.get_collection(name=COLLECTION_NAME)
+collection_docs = client.get_collection(name="YOLOdocs")
+with open("bm25/bm25_index.pkl", "rb") as f:
+    bm25_data_docs = pickle.load(f)
+collection_code = client.get_collection(name="YOLOcodes")
+with open("bm25/bm25_code.pkl", "rb") as f:
+    bm25_data_code = pickle.load(f)
 
-with open("bm25_index.pkl", "rb") as f:
-    bm25_data = pickle.load(f)
-
-bm25_model = bm25_data['bm25']
-bm25_ids = bm25_data['ids']
-bm25_docs = bm25_data['docs']
-bm25_meta = bm25_data['meta']
+def get_bm25(db_type):
+    """Возвращает нужные индексы bm25"""
+    data = bm25_data_docs if db_type == "docs" else bm25_data_code
+    return data['bm25'], data['ids'], data['docs'], data['meta'] 
 
 def rrf(vec_ids, bm_ids):
     """
@@ -66,7 +68,7 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 5, rerank_k = 15):
+def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 5, rerank_k = 15, db_target="docs"):
     """
     Гибридный поиск BM25 + векторный
     mode:
@@ -79,26 +81,31 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
     Используется реранкер
     """
 
+    collection = collection_docs if db_target == "docs" else collection_code
+    target_bm_model, target_bm_ids, target_bm_docs, target_bm_meta = get_bm25(db_target)
+
     vec_ids, vec_docs, vec_meta, vec_dists = [], [], [], []
     bm_ids, bm_docs, bm_meta, bm_scores = [], [], [], []
+
     if mode != "bm25":
     # Векторный поиск
         query_vector = embedder.encode(user_question).tolist()
-
         vector_results = collection.query(
             query_embeddings=[query_vector],
             n_results=n_results
         )
-
         vec_ids, vec_docs, vec_meta, vec_dists = vector_results['ids'][0], vector_results['documents'][0], vector_results['metadatas'][0], vector_results['distances'][0]
 
     if mode != "vector":
     # поиск BM25
         words_query = re.findall(r'\w+', user_question.lower()) #вопрос пользователя по словам
-        bm25_all_scores = bm25_model.get_scores(words_query)
+        bm25_all_scores = target_bm_model.get_scores(words_query)
         bm25_results = np.argsort(-bm25_all_scores)[:n_results]
 
-        bm_ids, bm_docs, bm_meta, bm_scores = [bm25_ids[i] for i in bm25_results], [bm25_docs[i] for i in bm25_results], [bm25_meta[i] for i in bm25_results], [bm25_all_scores[i] for i in bm25_results]
+        bm_ids = [target_bm_ids[i] for i in bm25_results]
+        bm_docs = [target_bm_docs[i] for i in bm25_results]
+        bm_meta = [target_bm_meta[i] for i in bm25_results]
+        bm_scores = [bm25_all_scores[i] for i in bm25_results]
 
     match mode:
         case "concatenate":
@@ -155,7 +162,15 @@ def rag_query(user_question: str, history: list):
     RAG-пайплайн с функцией гибридного поиска
     """
     try:
-        documentation = hybrid_search(user_question, n_results=25, mode="score", score_threshold=0)
+        route = get_route(user_question)
+
+        documentation = []
+        if route == "DOCS" or route == "BOTH":
+            docs_result = hybrid_search(user_question, n_results=25, mode="score", score_threshold=0, db_target="docs")
+            documentation.extend(docs_result)
+        if route == "CODE" or route == "BOTH":
+            code_result = hybrid_search(user_question, n_results=15, mode="score", score_threshold=0, db_target="code")
+            documentation.extend(code_result)
 
         if not documentation:
             return "Не найдено результатов"
@@ -163,7 +178,7 @@ def rag_query(user_question: str, history: list):
         context = "\n\n".join([doc for doc, _ in documentation])
         metadatas = [meta for _, meta in documentation]
 
-        sources =  "\n".join(sorted(set(m.get('source', 'неизвестно') for m in metadatas if m)))
+        sources = "\n".join(sorted(set([m.get('source') or m.get('file_name') or 'неизвестно' for m in metadatas if m])))
         
         prompt = f"""
         ВОПРОС: {user_question}
@@ -177,7 +192,7 @@ def rag_query(user_question: str, history: list):
         response = ollama.chat(
             model=LLM_MODEL_NAME,
             messages=[
-                {"role": "system", "content": "Ты - ассистент по документации. Отвечай строго по контексту и кратко (не более 5 предложений). Если ответа нет в контексте, скажи, что ответа нет."},
+                {"role": "system", "content": "Ты - ассистент по документации. Отвечай строго по контексту и кратко (не более 5 предложений), код в контексте можешь привести в ответе. Если ответа нет в контексте, скажи, что ответа нет."},
                 {"role": "user", "content": prompt}
             ],
             think=False,
