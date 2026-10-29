@@ -172,7 +172,7 @@ cython_debug/
 
 # Generated indices (rebuild with ingest.py / ingest_bm25.py)
 chroma_db/
-bm25_index.pkl
+bm25/
 
 # Downloaded source data (rebuild with updateData.py)
 data/
