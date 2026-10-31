@@ -1,226 +1,271 @@
 [
   {
-    "question": "Что представляет собой оптимизатор MuSGD в YOLO26?",
+    "question": "Какие версии программного обеспечения и оборудования использовались для валидации измерений производительности Ultralytics Platform на целевых устройствах Jetson?",
     "ground_truth": [
       {
-        "source": "docs\\modes\\train.md",
-        "span": "In YOLO26, **MuSGD** is a hybrid optimizer that combines standard **SGD** updates with **Muon-style orthogonalized updates**."
+        "source": "data\\docs\\platform\\train\\models.md",
+        "span": "The July 2026 validation measurements below used JetPack 7.2 / L4T r39.2, Python 3.12.3, NVIDIA PyTorch 2.12.0a0 (26.04 build), CUDA 13.2, and TensorRT 10.16.1.11."
       }
     ]
   },
   {
-    "question": "Какая компьютерная задача подходит для медицинского изображения?",
+    "question": "Как выполнить валидацию сжатой контрольной точки (checkpoint) перед компиляцией с использованием SpongeKit?",
     "ground_truth": [
       {
-        "source": "docs\\guides\\steps-of-a-cv-project.md",
-        "span": "Image segmentation is suitable for medical imaging because it provides accurate and detailed boundaries of tumors that are crucial for assessing size, shape, and treatment planning."
+        "source": "data\\docs\\integrations\\ambarella.md",
+        "span": "Validate accuracy before compiling, using the same config:\n\n!!! example \"Usage\"\n\n    === \"CLI\"\n\n        ```bash\n        yolo val model=runs/detect/train/weights/best.pt data=coco8.yaml \\\n          amba_config=config.prototxt amba_chipset=CV72\n        ```"
       }
     ]
   },
   {
-    "question": "Как настроить кастомный тренировщик для детекции, если модель не поддерживается напрямую?",
+    "question": "Какие рекомендации по размеру батча (batch size) даны для модели YOLO26n?",
     "ground_truth": [
       {
-        "source": "docs\\usage\\engine.md",
-        "span": "To train a custom detection model not directly supported, overload the existing `get_model` functionality:\n\n```python\nfrom ultralytics.models.yolo.detect import DetectionTrainer\n\n\nclass CustomTrainer(DetectionTrainer):\n    def get_model(self, cfg=None, weights=None, verbose=True):\n        \"\"\"Loads a custom detection model given configuration and weight files.\"\"\"\n\n\ntrainer = CustomTrainer(overrides={...})\ntrainer.train()\n```"
+        "source": "data\\docs\\guides\\yolo26-training-recipe.md",
+        "span": "Large batches (64-128) on consumer GPUs"
       }
     ]
   },
   {
-    "question": "Для чего рекомендуется использовать named returns в документации?",
+    "question": "Где можно найти подробные бенчмарки производительности для различных конфигураций оборудования?",
     "ground_truth": [
       {
-        "source": "docs\\help\\contributing.md",
-        "span": "Using named returns can make your code more self-documenting and easier to understand, especially for complex functions."
+        "source": "data\\docs\\integrations\\tensorrt.md",
+        "span": "Detailed performance benchmarks for different hardware configurations can be found in the [performance section](#ultralytics-yolo-tensorrt-export-performance)."
       }
     ]
   },
   {
-    "question": "Какие ограничения по количеству объектов и размеру файлов существуют при импорте в набор данных?",
+    "question": "Какая страница содержит ссылку на исходный код библиотеки Ultralytics для получения метаданных репозитория Git?",
     "ground_truth": [
       {
-        "source": "docs\\platform\\integrations\\azure-blob-storage.md",
-        "span": "A single import indexes up to 500,000 blobs, and label or YAML files up to 1 MB each."
+        "source": "data\\docs\\reference\\utils\\git.md",
+        "span": "This page is sourced from [https://github.com/ultralytics/ultralytics/blob/main/ultralytics/utils/git.py](https://github.com/ultralytics/ultralytics/blob/main/ultralytics/utils/git.py)."
       }
     ]
   },
   {
-    "question": "Какие альтернативные методы настройки предлагаются в документации?",
+    "question": "Как в примере 'Inference Loop (Simple OpenCV fallback)' загружается видеофайл и обрабатывается каждый кадр с использованием модели YOLO?",
     "ground_truth": [
       {
-        "source": "docs\\yolov5\\environments\\docker-image-quickstart-tutorial.md",
-        "span": "For alternative setup methods, consider our [Colab Notebook](https://colab.research.google.com/github/ultralytics/yolov5/blob/master/tutorial.ipynb) <a href=\"https://colab.research.google.com/github/ultralytics/yolov5/blob/master/tutorial.ipynb\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"></a> <a href=\"https://www.kaggle.com/models/ultralytics/yolov5\"><img src=\"https://kaggle.com/static/images/open-in-kaggle.svg\" alt=\"Open In Kaggle\"></a>, [GCP Deep Learning VM](./google-cloud-quickstart-tutorial.md), or [Amazon AWS](./aws-quickstart-tutorial.md) guides."
+        "source": "data\\docs\\guides\\nvidia-dali.md",
+        "span": "cap = cv2.VideoCapture(\"video.mp4\")\n            while cap.isOpened():\n                ret, frame = cap.read()\n                if not ret:\n                    break\n\n                # Feed BGR frame (convert to RGB for DALI)\n                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)\n                pipe.feed_input(\"input\", [np.array(frame_rgb)])\n                (output,) = pipe.run()"
       }
     ]
   },
   {
-    "question": "Для каких целей предназначен датасет ImageNet-Pseudo?",
+    "question": "Какие задачи (task types) поддерживает платформа Ultralytics?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\depth\\imagenet-pseudo.md",
-        "span": "Used purely for knowledge distillation and scene/object diversity, not as a benchmark."
+        "source": "data\\docs\\platform\\index.md",
+        "span": "**7 Task Types**: Support for detection, instance segmentation, semantic segmentation, depth estimation, classification, pose, and OBB (see [task docs](../tasks/index.md))"
       }
     ]
   },
   {
-    "question": "Как запустить обучение модели YOLO26n-Depth на Virtual KITTI 2 с размером изображения 640?",
+    "question": "Как использовать модель Ultralytics YOLO26 для выполнения вывода на сервере?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\depth\\vkitti2.md",
-        "span": "```python\nfrom ultralytics import YOLO\n\n# Load a model\nmodel = YOLO(\"yolo26n-depth.pt\")  # load a pretrained model (recommended for training)\n\n# Train the model\nresults = model.train(data=\"depth-vkitti2.yaml\", epochs=100, imgsz=640)\n```"
+        "source": "data\\docs\\guides\\triton-inference-server.md",
+        "span": "results = model(\"path/to/image.jpg\")"
       }
     ]
   },
   {
-    "question": "Под какой лицензией разработан и выпущен датасет Construction-PPE?",
+    "question": "Какие типы задач компьютерного зрения поддерживает формат YOLO?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\detect\\construction-ppe.md",
-        "span": "Construction-PPE is developed and released under the [AGPL-3.0 License](https://github.com/ultralytics/ultralytics/blob/main/LICENSE), supporting open-source research and commercial applications with proper attribution."
+        "source": "data\\docs\\guides\\data-collection-and-annotation.md",
+        "span": "Object detection, segmentation, pose, and oriented boxes"
       }
     ]
   },
   {
-    "question": "Как настроить точку наблюдения для функции VisionEye?",
+    "question": "Как установить пакет ClearML через pip для интеграции с YOLOv5?",
     "ground_truth": [
       {
-        "source": "docs\\guides\\vision-eye.md",
-        "span": "Set `vision_point` to the observer's pixel coordinates"
+        "source": "data\\docs\\yolov5\\tutorials\\clearml-logging-integration.md",
+        "span": "To enable experiment tracking, install the ClearML pip package if you haven't already:\n\n```bash\npip install clearml\n```"
       }
     ]
   },
   {
-    "question": "Для чего предназначен датасет Carparts-seg?",
+    "question": "Как установить пакет Ultralytics?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\segment\\index.md",
-        "span": "A specialized dataset focused on the segmentation of car parts, ideal for automotive applications."
+        "source": "data\\docs\\help\\FAQ.md",
+        "span": "Installing the Ultralytics package is straightforward using pip:\n\n```bash\npip install ultralytics\n```"
       }
     ]
   },
   {
-    "question": "Как запустить обучение модели YOLO26n на датасете COCO8-Multispectral с помощью командной строки?",
+    "question": "Какие разделы доступны в боковом меню приложения?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\detect\\coco8-multispectral.md",
-        "span": "yolo detect train data=coco8-multispectral.yaml model=yolo26n.pt epochs=100 imgsz=640"
+        "source": "data\\docs\\platform\\quickstart.md",
+        "span": "| **Content** | Annotate | Your datasets, with a `+` shortcut to create one | |             | Train | Your projects containing trained models | |             | Deployments | Your deployments, each opening its deployment page, with a `+` shortcut to create one | | **Footer**  | Help | Guides, community links, and the in-app feedback form | |             | Settings | Account, billing, teams, and preferences |"
       }
     ]
   },
   {
-    "question": "Что возвращает YOLO instance segmentation для каждого изображения?",
+    "question": "Какую библиотеку необходимо импортировать для выполнения вывода на изображение, открытое с помощью Python Imaging Library (PIL)?",
     "ground_truth": [
       {
-        "source": "docs\\tasks\\segment.md",
-        "span": "YOLO instance segmentation returns one `Results` object per image."
+        "source": "data\\docs\\modes\\predict.md",
+        "span": "from ultralytics import YOLO"
       }
     ]
   },
   {
-    "question": "Как цитировать набор данных xView в исследованиях?",
+    "question": "Как выполнить оценку модели YOLO26-Depth на бенчмарке NYU Depth V2 с использованием Python?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\detect\\xview.md",
-        "span": "Cite the paper \"xView: Objects in Context in Overhead Imagery\" (Lam et al., arXiv:1802.07856, 2018); the full BibTeX entry is in the [Citations and Acknowledgments](#citations-and-acknowledgments) section above."
+        "source": "data\\docs\\datasets\\depth\\nyu-depth-v2.md",
+        "span": "results = model.val(data=\"nyu-depth.yaml\")"
       }
     ]
   },
   {
-    "question": "Какие задачи решает ClearML в рамках Ultralytics?",
+    "question": "Можно ли точно воспроизвести опубликованные метрики COCO с помощью выпущенной версии пакета?",
     "ground_truth": [
       {
-        "source": "docs\\integrations\\index.md",
-        "span": "Automate your Ultralytics ML workflows, monitor experiments, and foster team collaboration."
+        "source": "data\\docs\\guides\\yolo26-training-recipe.md",
+        "span": "You will land close to the published metrics, but not identical to them. For an identical setup, check out the commit recorded in the checkpoint and train on that branch."
       }
     ]
   },
   {
-    "question": "Сколько классов в наборе данных COCO-Pose?",
+    "question": "Какой минимальный требуемый версия библиотеки PyTorch для экспорта модели в формат MNN?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\pose\\index.md",
-        "span": "- **Number of Classes**: 1 (person)."
+        "source": "data\\code_py\\utils\\export\\mnn.py",
+        "span": "assert TORCH_1_10, \"MNN export requires torch>=1.10.0 to avoid segmentation faults\""
       }
     ]
   },
   {
-    "question": "Как рекомендуется использовать преобученные веса для специализированных датасетов?",
+    "question": "Какая архитектура используется в классе LinearPresenceHead для предсказания наличия классов в изображении?",
     "ground_truth": [
       {
-        "source": "docs\\yolov5\\tutorials\\tips-for-best-training-results.md",
-        "span": "For specialized datasets, start with pretrained weights and optionally [freeze layers](transfer-learning-with-frozen-layers.md) with `--freeze` to adapt the model to your specific task."
+        "source": "data\\code_py\\models\\sam\\sam3\\maskformer_segmentation.py",
+        "span": "class LinearPresenceHead(nn.Sequential):\n    \"\"\"Linear presence head for predicting the presence of classes in an image.\"\"\"\n\n    def __init__(self, d_model):\n        \"\"\"Initialize the LinearPresenceHead.\"\"\"\n        # a hack to make `LinearPresenceHead` compatible with old checkpoints\n        super().__init__(nn.Identity(), nn.Identity(), nn.Linear(d_model, 1))"
       }
     ]
   },
   {
-    "question": "Какая работа и её авторы указаны в разделе Citations модели FastSAM?",
+    "question": "Какой слой используется для объединения выходных данных тензоров conv22_cv2_2_2 и conv22_cv3_2_2, и каково значение параметра, указывающего количество каналов для этого объединения?",
     "ground_truth": [
       {
-        "source": "docs\\models\\fast-sam.md",
-        "span": "```bibtex\n@misc{zhao2023fast,\n      title={Fast Segment Anything},\n      author={Xu Zhao and Wenchao Ding and Yongqi An and Yinglong Du and Tao Yu and Min Li and Ming Tang and Jinqiao Wang},\n      year={2023},\n      eprint={2306.12156},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV}\n}\n```"
+        "source": "data\\code_cpp\\src\\model.cpp",
+        "span": "nvinfer1::ITensor* inputTensor22_2[] = {conv22_cv2_2_2->getOutput(0), conv22_cv3_2_2->getOutput(0)};\n    nvinfer1::IConcatenationLayer* cat22_2 = network->addConcatenation(inputTensor22_2, 2);"
       }
     ]
   },
   {
-    "question": "Как интегрировать Comet с Ultralytics YOLO26 для обучения?",
+    "question": "Каким образом реализована защита от одновременных запусков конвертации одного и того же файла, чтобы избежать конфликтов при записи?",
     "ground_truth": [
       {
-        "source": "docs\\integrations\\comet.md",
-        "span": "1. **Install the required packages**:\n\n    ```bash\n    pip install ultralytics comet_ml\n    ```\n\n2. **Set up your Comet API Key**:\n\n    ```bash\n    export COMET_API_KEY=YOUR_API_KEY\n    ```"
+        "source": "data\\code_py\\data\\converter.py",
+        "span": "loop = asyncio.get_running_loop()\nwith await loop.run_in_executor(None, open, cache_path.with_suffix(\".lock\"), \"a\") as lock:  # released on close\n    waited = False\n    while True:\n        try:\n            if WINDOWS:\n                import msvcrt\n\n                msvcrt.locking(lock.fileno(), msvcrt.LK_NBLCK, 1)\n            else:\n                import fcntl\n\n                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)\n            break\n        except (BlockingIOError, PermissionError):  # held by another conversion (POSIX, Windows)\n            waited = True\n            await asyncio.sleep(0.05)"
       }
     ]
   },
   {
-    "question": "Какие поля необходимо указать в dataset YAML для настройки полигональных меток?",
+    "question": "Какой метод используется в классе SwiGLUFFN для применения трансформации SwiGLU к входным признакам?",
     "ground_truth": [
       {
-        "source": "docs\\datasets\\semantic\\index.md",
-        "span": "Create a dataset YAML with `path`, `train`, `val`, and `names` — **omit** `masks_dir`."
+        "source": "data\\code_py\\nn\\modules\\block.py",
+        "span": "hidden = F.silu(x1) * x2"
       }
     ]
   },
   {
-    "question": "Сколько слоёв и параметров у модели YOLOv5 при pruning?",
+    "question": "Какие аргументы принимаются в методе train() для настройки процесса обучения модели, включая количество эпох, размер батча и устройство?",
     "ground_truth": [
       {
-        "source": "docs\\yolov5\\tutorials\\model-pruning-and-sparsity.md",
-        "span": "Model Summary: 444 layers, 86705005 parameters, 0 gradients"
+        "source": "data\\code_py\\engine\\model.py",
+        "span": "Args:\n            trainer (type[BaseTrainer], optional): Custom trainer class for model training. If None, uses the default\n                trainer for the task.\n            **kwargs (Any): Arbitrary keyword arguments for training configuration. Common options include:\n                - data (str): Path to dataset configuration file.\n                - epochs (int): Number of training epochs.\n                - batch (int): Batch size for training.\n                - imgsz (int): Input image size.\n                - device (str): Device to run training on (e.g., 'cuda', 'cpu')."
       }
     ]
   },
   {
-    "question": "Для чего используется Benchmark mode?",
+    "question": "Какие параметры используются для определения ширины (width) и глубины (depth) в операциях C2F (convolutional block with skip connection) в заданном коде?",
     "ground_truth": [
       {
-        "source": "docs\\usage\\python.md",
-        "span": "[Benchmark mode](../modes/benchmark.md) is used to profile the speed and accuracy of various export formats for YOLO."
+        "source": "data\\code_cpp\\src\\model.cpp",
+        "span": "nvinfer1::IElementWiseLayer* conv2 = C2F(network, weightMap, *conv1->getOutput(0), get_width(128, gw, max_channels),\n                                             get_width(128, gw, max_channels), get_depth(3, gd), true, 0.5, \"model.2\");"
       }
     ]
   },
   {
-    "question": "Как изолировать объект с черным фоном?",
+    "question": "Какой размер ширины (в пикселях) используется для конволюционного слоя model.29?",
     "ground_truth": [
       {
-        "source": "docs\\guides\\isolating-segmentation-objects.md",
-        "span": "# Isolate object with a black background\n        mask3ch = cv2.cvtColor(b_mask, cv2.COLOR_GRAY2BGR)\n        isolated = cv2.bitwise_and(mask3ch, img)"
+        "source": "data\\code_cpp\\yolov8_trt10\\src\\model.cpp",
+        "span": "get_width(1024, gw, max_channels)"
       }
     ]
   },
   {
-    "question": "Для чего предназначен формат YOLO26 ExecuTorch?",
+    "question": "Каков максимальный номер объектов (max_obj_num), который может отслеживать SAM2DynamicInteractivePredictor по умолчанию?",
     "ground_truth": [
       {
-        "source": "docs\\integrations\\executorch.md",
-        "span": "Export YOLO26 models to ExecuTorch format for efficient on-device inference on mobile and edge devices."
+        "source": "data\\code_py\\models\\sam\\predict.py",
+        "span": "max_obj_num (int): Maximum number of objects to track. Default is 3. This is set to keep fixed feature size for the model."
       }
     ]
   },
   {
-    "question": "Что происходит с выбором датасета, если параметр `data` опущен при `quantize=8` или `'w8a16'`?",
+    "question": "Как обрабатывается ситуация, когда в сегментации объекта обнаружено более одного полигона?",
     "ground_truth": [
       {
-        "source": "docs\\integrations\\tfjs.md",
-        "span": "If omitted with `quantize=8` or `'w8a16'`, Ultralytics selects the default calibration dataset for the model task."
+        "source": "data\\code_py\\data\\converter.py",
+        "span": "elif len(polygons) > 1:\n                        s = merge_multi_segment(polygons)\n                        s = (np.concatenate(s, axis=0) / np.array([w, h])).reshape(-1).tolist()\n                        segments.append([cls, *s])"
+      }
+    ]
+  },
+  {
+    "question": "Какой формат вывода данных (DataFrame) возвращает функция benchmark?",
+    "ground_truth": [
+      {
+        "source": "data\\code_py\\utils\\benchmarks.py",
+        "span": "Returns:\n        (polars.DataFrame): A Polars DataFrame of string-formatted benchmark results for each format, including status,\n            file size, metric, inference time, and FPS."
+      }
+    ]
+  },
+  {
+    "question": "Какой метод используется для инициализации состояния предсказателя (inference state) в классе SAM2VideoPredictor?",
+    "ground_truth": [
+      {
+        "source": "data\\code_py\\models\\sam\\predict.py",
+        "span": "@staticmethod\n    def init_state(predictor):\n        \"\"\"Initialize an inference state for the predictor."
+      }
+    ]
+  },
+  {
+    "question": "Какой порядок перестановок применяется в функции do_pool для обработки пространственных измерений тензора перед и после применения пулинга?",
+    "ground_truth": [
+      {
+        "source": "data\\code_py\\models\\sam\\modules\\blocks.py",
+        "span": "# (B, H, W, C) -> (B, C, H, W)\n    x = x.permute(0, 3, 1, 2)\n    x = pool(x)\n    # (B, C, H', W') -> (B, H', W', C)\n    x = x.permute(0, 2, 3, 1)"
+      }
+    ]
+  },
+  {
+    "question": "Какой режим интерполяции используется для слоя upsample10?",
+    "ground_truth": [
+      {
+        "source": "data\\code_cpp\\yolov8_trt10\\src\\model.cpp",
+        "span": "upsample10->setResizeMode(nvinfer1::InterpolationMode::kNEAREST);"
+      }
+    ]
+  },
+  {
+    "question": "Как формируется новый размер (shape) частотного тензора после его трансформации для совместного распространения (broadcasting) с входным тензором?",
+    "ground_truth": [
+      {
+        "source": "data\\code_py\\models\\sam\\modules\\utils.py",
+        "span": "shape = [d if i >= ndim - 2 else 1 for i, d in enumerate(x.shape)]"
       }
     ]
   }

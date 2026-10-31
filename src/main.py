@@ -157,20 +157,28 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
             results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
     return results
 
+def routing(user_question: str, mode="score", use_reranker=True, score_threshold=None, use_router=True):
+    """Маршрут и отправка в поиск"""
+    documentation = []
+    try:
+        route = get_route(user_question) if use_router else "BOTH"
+
+        if route == "DOCS" or route == "BOTH":
+            documentation.extend(hybrid_search(user_question, n_results=25, mode=mode, score_threshold=score_threshold, use_reranker=use_reranker, db_target="docs"))
+        if route == "CODE" or route == "BOTH":
+            documentation.extend(hybrid_search(user_question, n_results=15, mode=mode, score_threshold=score_threshold,use_reranker=use_reranker, db_target="code"))
+    except Exception as e:
+        print(f"Ошибка маршрутизации: {e}")
+        
+    return documentation
+
+    
 def rag_query(user_question: str, history: list):
     """
     RAG-пайплайн с функцией гибридного поиска
     """
     try:
-        route = get_route(user_question)
-
-        documentation = []
-        if route == "DOCS" or route == "BOTH":
-            docs_result = hybrid_search(user_question, n_results=25, mode="score", score_threshold=0, db_target="docs")
-            documentation.extend(docs_result)
-        if route == "CODE" or route == "BOTH":
-            code_result = hybrid_search(user_question, n_results=15, mode="score", score_threshold=0, db_target="code")
-            documentation.extend(code_result)
+        documentation = routing(user_question)
 
         if not documentation:
             return "Не найдено результатов"
