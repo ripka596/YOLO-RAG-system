@@ -92,7 +92,7 @@ def gen_questions(bm25_data, db_name, num_q):
                             })
 
         except Exception as e:
-            print(f"Ошибка генерации для чанка {idx}: {e}. \n Ответ нейросети:\n'{response["message"]["content"]}'\n\nТекст: {text[:200]}")
+            print(f"Ошибка генерации для чанка {idx}: {e}. \n Ответ нейросети:\n'{response['message']['content']}'\n\nТекст: {text[:200]}")
             continue
     return dataset
 
@@ -156,23 +156,63 @@ if __name__ == "__main__":
                     "Отклонение (s)": std_time
                 }
             if use_router:
-                results[label] = data
-            else:
                 results_router[label] = data
+            else:
+                results[label] = data
         
     df = pd.DataFrame(results)
     df_router = pd.DataFrame(results_router)
 
     xlsx_path = "metrics/metrics_results.xlsx"
-    with pd.ExcelWriter(xlsx_path, engine="xlsxwriter") as writer:
-        df.to_excel(writer, sheet_name="Результаты", startrow=0, index_label="Метрика")
-        worksheet = writer.sheets["Результаты"]
+    with pd.ExcelWriter(xlsx_path, engine="xlsxwriter") as writer: #Форматирование таблички Excel
+        df.to_excel(writer, sheet_name="Результаты", startrow=1, index_label="Метрика")
         start_row2 = len(df) + 4
-
-        worksheet.write_string(0, 0, "Без роутера")
-        worksheet.write_string(start_row2-2, 0 , "С роутером")
-
         df_router.to_excel(writer, sheet_name="Результаты", startrow=start_row2, index_label="Метрика")
+
+        workbook = writer.book
+        worksheet = writer.sheets["Результаты"]
+        title_format = workbook.add_format({
+            'bold': True, 'font_size': 16, 'align': 'center', 'valign': 'vcenter', 'border': 1
+        })
+        metrics_format = workbook.add_format({'bold': True, 'border': 1, 'align': 'center', 'valign': 'vcenter'})
+        number_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1})
+
+        num_cols = len(df.columns)
+        worksheet.set_column(0, 0, 16, metrics_format)
+        worksheet.set_column(1, num_cols, 13, number_format)
+        worksheet.merge_range(0, 0, 0, num_cols, "Результаты без роутера", title_format)
+        worksheet.merge_range(start_row2-1, 0, start_row2-1, num_cols, "Результаты с роутером", title_format)
+        worksheet.set_row(0, 55)
+        worksheet.set_row(start_row2-1, 55)
+        worksheet.set_row(1, 55)
+        worksheet.set_row(start_row2, 55)
+        for row in range(2, len(df) + 2):
+            worksheet.set_row(row, 25)
+        for row in range(start_row2 + 1, start_row2 + 1 + len(df_router)):
+            worksheet.set_row(row, 25)
+
+        higher_is_better = {
+            'type': '3_color_scale',
+            'min_color': '#F8696B',
+            'mid_color': '#FFEB84',
+            'max_color': '#63BE7B'
+        }
+        lower_is_better = {
+            'type': '3_color_scale',
+            'min_color': '#63BE7B',
+            'mid_color': '#FFEB84',
+            'max_color': '#F8696B'
+        }
+        first_col = 1
+        last_col = num_cols
+        def apply_colors(table_start_row):
+            worksheet.conditional_format(table_start_row + 1, first_col, table_start_row + 1, last_col, higher_is_better)
+            worksheet.conditional_format(table_start_row + 2, first_col, table_start_row + 2, last_col, higher_is_better)
+            worksheet.conditional_format(table_start_row + 3, first_col, table_start_row + 3, last_col, lower_is_better)
+            worksheet.conditional_format(table_start_row + 4, first_col, table_start_row + 4, last_col, lower_is_better)
+            worksheet.conditional_format(table_start_row + 5, first_col, table_start_row + 5, last_col, lower_is_better)
+        apply_colors(1)
+        apply_colors(start_row2)
 
     df.to_csv("metrics/results.csv", index_label="Метрика", encoding="utf-8-sig")
     df_router.to_csv("metrics/router_results.csv", index_label="Метрика", encoding="utf-8-sig")

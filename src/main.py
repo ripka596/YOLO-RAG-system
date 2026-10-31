@@ -68,7 +68,7 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 5, rerank_k = 15, db_target="docs"):
+def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 8, rerank_k = 20, db_target="docs"):
     """
     Гибридный поиск BM25 + векторный
     mode:

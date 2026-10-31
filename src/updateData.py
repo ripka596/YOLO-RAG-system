@@ -34,11 +34,11 @@ def update_data():
 
 def update_code_cpp():
     shutil.rmtree(CPP_DIR, ignore_errors=True)
-    shutil.rmtree("temp_yolov8", ignore_errors=True)
+    shutil.rmtree("temp_tensorrtx", ignore_errors=True)
 
     subprocess.run(["git", "clone", "--depth", "1", CPP_REPO_URL, str(CPP_DIR)])
 
-    temp_dir = Path("temp_yolov8")
+    temp_dir = Path("temp_tensorrtx")
     shutil.move(str(CPP_DIR / "yolov8"), str(temp_dir))
     shutil.rmtree(CPP_DIR, onexc=remove_readonly)
     shutil.move(str(temp_dir), str(CPP_DIR))
