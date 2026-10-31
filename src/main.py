@@ -68,7 +68,7 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=None, top_k = 8, rerank_k = 20, db_target="docs"):
+def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=0, top_k = 8, rerank_k = 20, db_target="docs"):
     """
     Гибридный поиск BM25 + векторный
     mode:
@@ -157,16 +157,16 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
             results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
     return results
 
-def routing(user_question: str, mode="score", use_reranker=True, score_threshold=None, use_router=True):
+def routing(user_question: str, mode="rrf", use_reranker=True, score_threshold=None, top_k=8, rerank_k=20, use_router=True):
     """Маршрут и отправка в поиск"""
     documentation = []
     try:
         route = get_route(user_question) if use_router else "BOTH"
 
         if route == "DOCS" or route == "BOTH":
-            documentation.extend(hybrid_search(user_question, n_results=25, mode=mode, score_threshold=score_threshold, use_reranker=use_reranker, db_target="docs"))
+            documentation.extend(hybrid_search(user_question, n_results=25, mode=mode, use_reranker=use_reranker, score_threshold=score_threshold, top_k=8, rerank_k=20, db_target="docs"))
         if route == "CODE" or route == "BOTH":
-            documentation.extend(hybrid_search(user_question, n_results=15, mode=mode, score_threshold=score_threshold,use_reranker=use_reranker, db_target="code"))
+            documentation.extend(hybrid_search(user_question, n_results=15, mode=mode,use_reranker=use_reranker, score_threshold=score_threshold, top_k=top_k, rerank_k=rerank_k, db_target="code"))
     except Exception as e:
         print(f"Ошибка маршрутизации: {e}")
         
