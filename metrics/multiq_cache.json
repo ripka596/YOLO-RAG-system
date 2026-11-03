@@ -1,0 +1,182 @@
+{
+  "Какие версии программного обеспечения и оборудования использовались для валидации измерений производительности Ultralytics Platform на целевых устройствах Jetson?": [
+    "Какие версии программного обеспечения и оборудования использовались для валидации измерений производительности Ultralytics Platform на целевых устройствах Jetson?",
+    "Ultralytics Platform validation performance metrics Jetson hardware software versions",
+    "Ultralytics Platform benchmarking results NVIDIA Jetson device specifications",
+    "Ultralytics Platform release notes Jetson compatibility and performance validation"
+  ],
+  "Как выполнить валидацию сжатой контрольной точки (checkpoint) перед компиляцией с использованием SpongeKit?": [
+    "Как выполнить валидацию сжатой контрольной точки (checkpoint) перед компиляцией с использованием SpongeKit?",
+    "How to validate a compressed checkpoint before compiling with SpongeKit?",
+    "SpongeKit compressed checkpoint validation method",
+    "Как проверить целостность сжатой контрольной точки перед компиляцией в SpongeKit"
+  ],
+  "Какие рекомендации по размеру батча (batch size) даны для модели YOLO26n?": [
+    "Какие рекомендации по размеру батча (batch size) даны для модели YOLO26n?",
+    "What are the recommended batch size settings for YOLOv26n?",
+    "How to determine the optimal batch size for YOLOv26n training?",
+    "What are the best practices for configuring batch size in YOLOv26n?"
+  ],
+  "Где можно найти подробные бенчмарки производительности для различных конфигураций оборудования?": [
+    "Где можно найти подробные бенчмарки производительности для различных конфигураций оборудования?",
+    "Где в документации YOLO можно найти подробные бенчмарки производительности для различных конфигураций оборудования?",
+    "Where can I find detailed performance benchmarks for various hardware configurations in the YOLO documentation?",
+    "Какие разделы документации YOLO содержат сравнительные таблицы скорости и точности для разных GPU и CPU?"
+  ],
+  "Какая страница содержит ссылку на исходный код библиотеки Ultralytics для получения метаданных репозитория Git?": [
+    "Какая страница содержит ссылку на исходный код библиотеки Ultralytics для получения метаданных репозитория Git?",
+    "Ultralytics source code repository metadata Git page",
+    "Ultralytics GitHub repository metadata page",
+    "Ultralytics library source code documentation"
+  ],
+  "Как в примере 'Inference Loop (Simple OpenCV fallback)' загружается видеофайл и обрабатывается каждый кадр с использованием модели YOLO?": [
+    "Как в примере 'Inference Loop (Simple OpenCV fallback)' загружается видеофайл и обрабатывается каждый кадр с использованием модели YOLO?",
+    "How to load video file and process each frame with YOLO in 'Inference Loop (Simple OpenCV fallback)' example?",
+    "How to implement video inference loop using OpenCV and YOLOv8 in the simple fallback example?",
+    "What is the correct way to read video frames and run YOLO detection in the OpenCV fallback inference loop?"
+  ],
+  "Какие задачи (task types) поддерживает платформа Ultralytics?": [
+    "Какие задачи (task types) поддерживает платформа Ultralytics?",
+    "What task types does Ultralytics support?",
+    "What are the supported task types in the Ultralytics library?",
+    "How many task types are available in YOLO and what are they?"
+  ],
+  "Как использовать модель Ultralytics YOLO26 для выполнения вывода на сервере?": [
+    "Как использовать модель Ultralytics YOLO26 для выполнения вывода на сервере?",
+    "How to deploy Ultralytics YOLOv8 on a server for inference?",
+    "Ultralytics YOLOv8 server deployment guide",
+    "Running Ultralytics YOLOv8 model in Docker container"
+  ],
+  "Какие типы задач компьютерного зрения поддерживает формат YOLO?": [
+    "Какие типы задач компьютерного зрения поддерживает формат YOLO?",
+    "What computer vision tasks does the YOLO format support?",
+    "What object detection and segmentation capabilities does YOLO provide?",
+    "Which YOLO models support instance segmentation and pose estimation?"
+  ],
+  "Как установить пакет ClearML через pip для интеграции с YOLOv5?": [
+    "Как установить пакет ClearML через pip для интеграции с YOLOv5?",
+    "How to install ClearML with pip for YOLOv5 integration",
+    "ClearML installation pip YOLOv5 tutorial",
+    "Connecting ClearML to YOLOv5 training pipeline"
+  ],
+  "Как установить пакет Ultralytics?": [
+    "Как установить пакет Ultralytics?",
+    "How to install Ultralytics package",
+    "Установка пакета Ultralytics",
+    "Установка библиотеки YOLO через pip"
+  ],
+  "Какие разделы доступны в боковом меню приложения?": [
+    "Какие разделы доступны в боковом меню приложения?",
+    "What sections are available in the sidebar menu of the YOLO application?",
+    "How to navigate through the main modules in the YOLO web interface?",
+    "List all the top-level navigation items in the YOLOv8 documentation UI"
+  ],
+  "Какую библиотеку необходимо импортировать для выполнения вывода на изображение, открытое с помощью Python Imaging Library (PIL)?": [
+    "Какую библиотеку необходимо импортировать для выполнения вывода на изображение, открытое с помощью Python Imaging Library (PIL)?",
+    "How to draw a bounding box on an image opened with PIL in YOLO?",
+    "What is the correct import statement for drawing on PIL images when using YOLO?",
+    "Which YOLO function is used to visualize predictions on a PIL image?"
+  ],
+  "Как выполнить оценку модели YOLO26-Depth на бенчмарке NYU Depth V2 с использованием Python?": [
+    "Как выполнить оценку модели YOLO26-Depth на бенчмарке NYU Depth V2 с использованием Python?",
+    "How to evaluate YOLOv26-Depth on NYU Depth V2 benchmark using Python",
+    "How to run inference and metrics for YOLOv26-Depth on NYU V2 dataset",
+    "YOLOv26-Depth NYU Depth V2 evaluation script Python"
+  ],
+  "Можно ли точно воспроизвести опубликованные метрики COCO с помощью выпущенной версии пакета?": [
+    "Можно ли точно воспроизвести опубликованные метрики COCO с помощью выпущенной версии пакета?",
+    "How to reproduce COCO metrics exactly with the released PyTorch version?",
+    "What are the required steps to match official COCO evaluation results using the official codebase?",
+    "Can I verify the exact COCO mAP scores reported in the paper using the current release?"
+  ],
+  "Какой минимальный требуемый версия библиотеки PyTorch для экспорта модели в формат MNN?": [
+    "Какой минимальный требуемый версия библиотеки PyTorch для экспорта модели в формат MNN?",
+    "What is the minimum PyTorch version required for exporting a model to MNN format?",
+    "How to check PyTorch version requirements for MNN export in YOLO documentation",
+    "Is there a specific PyTorch version constraint for MNN export in Ultralytics YOLO"
+  ],
+  "Какая архитектура используется в классе LinearPresenceHead для предсказания наличия классов в изображении?": [
+    "Какая архитектура используется в классе LinearPresenceHead для предсказания наличия классов в изображении?",
+    "What is the architecture of LinearPresenceHead in YOLO?",
+    "How does LinearPresenceHead predict class presence in YOLO?",
+    "What is the internal structure of LinearPresenceHead for class presence prediction?"
+  ],
+  "Какой слой используется для объединения выходных данных тензоров conv22_cv2_2_2 и conv22_cv3_2_2, и каково значение параметра, указывающего количество каналов для этого объединения?": [
+    "Какой слой используется для объединения выходных данных тензоров conv22_cv2_2_2 и conv22_cv3_2_2, и каково значение параметра, указывающего количество каналов для этого объединения?",
+    "Как в YOLOv8 определить количество каналов и конфигурацию объединения (concat) между тензорами conv22_cv2_2_2 и conv22_cv3_2_2?",
+    "What is the channel count and concatenation configuration used to merge the tensor outputs from conv22_cv2_2_2 and conv22_cv3_2_2 in the YOLOv8 architecture?",
+    "How can I find the specific layer in YOLO documentation that merges conv22_cv2_2_2 and conv22_cv3_2_2, including the number of output channels?"
+  ],
+  "Каким образом реализована защита от одновременных запусков конвертации одного и того же файла, чтобы избежать конфликтов при записи?": [
+    "Каким образом реализована защита от одновременных запусков конвертации одного и того же файла, чтобы избежать конфликтов при записи?",
+    "How does YOLO handle concurrent conversion of the same file to prevent write conflicts?",
+    "Is there a locking mechanism in YOLO to prevent simultaneous conversion of identical files?",
+    "Как реализована защита от одновременных запусков конвертации одного и того же файла в YOLO?"
+  ],
+  "Какой метод используется в классе SwiGLUFFN для применения трансформации SwiGLU к входным признакам?": [
+    "Какой метод используется в классе SwiGLUFFN для применения трансформации SwiGLU к входным признакам?",
+    "SwiGLUFFN SwiGLU transformation implementation PyTorch",
+    "How to apply SwiGLU activation in SwiGLUFFN layer YOLOv8",
+    "SwiGLU functional application method SwiGLUFFN class"
+  ],
+  "Какие аргументы принимаются в методе train() для настройки процесса обучения модели, включая количество эпох, размер батча и устройство?": [
+    "Какие аргументы принимаются в методе train() для настройки процесса обучения модели, включая количество эпох, размер батча и устройство?",
+    "Какие аргументы принимает метод train() для настройки обучения модели, включая количество эпох, размер батча и целевое устройство?",
+    "What arguments does the train() method accept to configure model training, including number of epochs, batch size, and device?",
+    "Как в YOLO указать количество эпох, размер батча и устройство в методе train()?"
+  ],
+  "Какие параметры используются для определения ширины (width) и глубины (depth) в операциях C2F (convolutional block with skip connection) в заданном коде?": [
+    "Какие параметры используются для определения ширины (width) и глубины (depth) в операциях C2F (convolutional block with skip connection) в заданном коде?",
+    "C2F block width and depth parameters PyTorch implementation",
+    "How to configure C2F module input channels and expansion ratio in YOLOv8 source code",
+    "C2F convolutional block width and depth scaling factors documentation"
+  ],
+  "Какой размер ширины (в пикселях) используется для конволюционного слоя model.29?": [
+    "Какой размер ширины (в пикселях) используется для конволюционного слоя model.29?",
+    "What is the input width in pixels for convolutional layer model.29 in YOLO documentation?",
+    "How to determine the spatial dimensions of feature maps for layer model.29 in YOLO architecture?",
+    "What is the width of the feature map fed into layer model.29 according to YOLO training specifications?"
+  ],
+  "Каков максимальный номер объектов (max_obj_num), который может отслеживать SAM2DynamicInteractivePredictor по умолчанию?": [
+    "Каков максимальный номер объектов (max_obj_num), который может отслеживать SAM2DynamicInteractivePredictor по умолчанию?",
+    "What is the default maximum number of objects tracked by SAM2DynamicInteractivePredictor?",
+    "How to determine the max_obj_num limit for SAM2DynamicInteractivePredictor in the documentation?",
+    "What is the default value for max_obj_num in SAM2DynamicInteractivePredictor?"
+  ],
+  "Как обрабатывается ситуация, когда в сегментации объекта обнаружено более одного полигона?": [
+    "Как обрабатывается ситуация, когда в сегментации объекта обнаружено более одного полигона?",
+    "How does YOLO handle multiple polygon masks for a single object instance?",
+    "What is the behavior of YOLO when an object is segmented with more than one bounding box or mask?",
+    "How does YOLO resolve overlapping or multiple segmentation masks per object during inference?"
+  ],
+  "Какой формат вывода данных (DataFrame) возвращает функция benchmark?": [
+    "Какой формат вывода данных (DataFrame) возвращает функция benchmark?",
+    "What is the return type of the benchmark function in YOLO?",
+    "Does the benchmark function in YOLO return a pandas DataFrame?",
+    "How to access the output DataFrame from the benchmark() method in YOLOv8/v9/v10?"
+  ],
+  "Какой метод используется для инициализации состояния предсказателя (inference state) в классе SAM2VideoPredictor?": [
+    "Какой метод используется для инициализации состояния предсказателя (inference state) в классе SAM2VideoPredictor?",
+    "How to initialize the inference state in SAM2VideoPredictor class",
+    "SAM2VideoPredictor inference state initialization method",
+    "What method sets the initial inference state for SAM2VideoPredictor"
+  ],
+  "Какой порядок перестановок применяется в функции do_pool для обработки пространственных измерений тензора перед и после применения пулинга?": [
+    "Какой порядок перестановок применяется в функции do_pool для обработки пространственных измерений тензора перед и после применения пулинга?",
+    "YOLO do_pool spatial permutation order before and after pooling",
+    "How does do_pool rearrange tensor spatial dimensions in YOLO?",
+    "YOLO documentation: spatial permutation sequence in do_pool function"
+  ],
+  "Какой режим интерполяции используется для слоя upsample10?": [
+    "Какой режим интерполяции используется для слоя upsample10?",
+    "What interpolation mode is used in the upsample10 layer of YOLO?",
+    "Which interpolation method does YOLO employ for its upsample10 layer?",
+    "How is interpolation handled in the upsample10 layer according to YOLO documentation?"
+  ],
+  "Как формируется новый размер (shape) частотного тензора после его трансформации для совместного распространения (broadcasting) с входным тензором?": [
+    "Как формируется новый размер (shape) частотного тензора после его трансформации для совместного распространения (broadcasting) с входным тензором?",
+    "How is the new frequency tensor shape determined after transformation for broadcasting with the input tensor in YOLO documentation?",
+    "What are the rules for broadcasting frequency tensor shapes during YOLO's preprocessing or inference stages?",
+    "How does YOLO handle shape mismatches when broadcasting frequency tensors with input tensors?"
+  ]
+}

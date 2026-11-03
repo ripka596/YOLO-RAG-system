@@ -1,0 +1,5 @@
+﻿Метрика,router + mq,"router, no mq",no router + mq,"no router, no mq"
+Recall@5,0.733,0.667,0.767,0.7
+MRR,0.643,0.601,0.641,0.623
+Avg chunks,6.6,6.2,7.1,7.1
+Latency (s),1.95,0.82,3.02,1.43
