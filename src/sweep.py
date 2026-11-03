@@ -1,5 +1,5 @@
 import json, pandas as pd, time
-from main import hybrid_search
+from main import SearchConfig, routing
 from metrics import GROUND_TRUTH, calc_metrics
 
 
@@ -23,7 +23,7 @@ for rerank_k in RERANK_K_LIST:
         configs.append((rerank_k, rerank_k, th))
 
 for _ in range(3):
-    hybrid_search(dataset[0]["question"], n_results=25, mode=MODE)
+    routing(dataset[0]["question"], config=SearchConfig(mode=MODE))
 
 for rerank_k, top_k, th in configs:
     if th is None:
@@ -31,11 +31,12 @@ for rerank_k, top_k, th in configs:
     else:
         label = f"rk={rerank_k} | score>={th}"
 
+    current_config = SearchConfig(mode=MODE, rerank_k=rerank_k, top_k=top_k, score_threshold=th, use_router=False, multi_query=False)
     recalls, rrs, counts, times = [], [], [], []
 
     for item in dataset:
         start = time.perf_counter()
-        chunks = hybrid_search(item["question"], n_results=25, mode=MODE, score_threshold=th, top_k=top_k, rerank_k=rerank_k)
+        chunks = routing(item["question"], config=current_config)
         times.append(time.perf_counter() - start)
 
         eval_k = top_k if top_k is not None else len(chunks)

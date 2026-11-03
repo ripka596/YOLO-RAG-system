@@ -1,5 +1,5 @@
 import json, time, os, statistics, random, pandas as pd, ollama
-from main import LLM_MODEL_NAME, bm25_data_docs, bm25_data_code, routing
+from main import SearchConfig, LLM_MODEL_NAME, bm25_data_docs, bm25_data_code, routing
 
 GROUND_TRUTH = "metrics/ground_truth.json"
 N_QUESTIONS = 30
@@ -123,18 +123,19 @@ if __name__ == "__main__":
     
     results = {}
     results_router = {}
+
     for mode, reranker, threshold in configs:
         label = f"{mode}{' + rerank' if reranker else ''}{f' (score >={threshold})' if threshold is not None else ''}"
         for use_router in [True, False]:
             router_status = "С роутером" if use_router else "Без роутера"
-
+            current_config = SearchConfig(mode=mode, use_reranker=reranker, score_threshold=threshold, use_router=use_router, multi_query=False)
             for _ in range(3):
-                routing(warmup_q, mode=mode, use_reranker=reranker, score_threshold=threshold, use_router=use_router)
+                routing(warmup_q, config=current_config)
 
             recalls, rrs, times, counts = [], [], [], []
 
             for item in dataset:
-                chunks = routing(item["question"], mode=mode, use_reranker=reranker, score_threshold=threshold, use_router=use_router)
+                chunks = routing(item["question"], config=current_config)
                 recall, rr = calc_metrics(chunks, item["ground_truth"])
                 recalls.append(recall)
                 rrs.append(rr)
@@ -142,7 +143,7 @@ if __name__ == "__main__":
 
                 for _ in range(N_RUNS):
                     start = time.perf_counter()
-                    routing(item["question"], mode=mode, use_reranker=reranker, score_threshold=threshold, use_router=use_router)
+                    routing(item["question"], config=current_config)
                     times.append(time.perf_counter() - start)
 
             avg_time = round(sum(times) / len(times), 4)

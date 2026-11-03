@@ -1,10 +1,11 @@
+import re, pickle, ollama, chromadb, torch, gradio as gr, numpy as np
+
 from sentence_transformers import SentenceTransformer, CrossEncoder
-import re, pickle, numpy as np
 from itertools import chain
-import ollama
-import chromadb
-import torch
-import gradio as gr
+from typing import Optional
+
+from dataclasses import dataclass, replace
+from multi_query import multi_query
 from router import get_route
 
 
@@ -14,22 +15,36 @@ RERANK_MODEL_NAME = "Qwen/Qwen3-Reranker-0.6B"
 LLM_MODEL_NAME = "qwen3_5:latest"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-
 embedder = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 reranker = CrossEncoder(RERANK_MODEL_NAME, device=device)
 
+@dataclass
+class SearchConfig:
+    mode: str = "rrf"  # "concatenate", "rrf", "score", "vector", "bm25"
+    use_reranker: bool = True
+    score_threshold: Optional[float] = None
+    top_k: int = 8
+    rerank_k: int = 20
+    use_router: bool = True
+    multi_query: bool = True
+
 client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
+
 collection_docs = client.get_collection(name="YOLOdocs")
 with open("bm25/bm25_index.pkl", "rb") as f:
     bm25_data_docs = pickle.load(f)
+
 collection_code = client.get_collection(name="YOLOcodes")
 with open("bm25/bm25_code.pkl", "rb") as f:
     bm25_data_code = pickle.load(f)
+
+
 
 def get_bm25(db_type):
     """Возвращает нужные индексы bm25"""
     data = bm25_data_docs if db_type == "docs" else bm25_data_code
     return data['bm25'], data['ids'], data['docs'], data['meta'] 
+
 
 def rrf(vec_ids, bm_ids):
     """
@@ -42,6 +57,7 @@ def rrf(vec_ids, bm_ids):
     for rank, doc_id in enumerate(bm_ids):
         scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
     return sorted(scores.keys(), key=scores.get, reverse=True)
+
 
 def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     """
@@ -68,7 +84,27 @@ def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
     return sorted(scores_results.keys(), key=scores_results.get, reverse=True)
 
 
-def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=True, score_threshold=0, top_k = 8, rerank_k = 20, db_target="docs"):
+def rerank(user_question: str, docs_metas: list, config: SearchConfig = None):
+    """
+    Реранкинг результатов поиска, возвращает top_k лучших результатов или фильтрует по порогу score_threshold
+    """
+    if not docs_metas:
+        return []
+    docs, metas = zip(*docs_metas)
+
+    pairs = [[user_question, doc] for doc in docs]
+
+    scores = reranker.predict(pairs)
+    reranked_results = np.argsort(-np.array(scores))[:config.top_k]
+    if config.score_threshold is not None:
+        results = [(docs[i], metas[i]) for i in reranked_results if scores[i] >= config.score_threshold]
+    else:
+        results = [(docs[i], metas[i]) for i in reranked_results]
+
+    return results
+
+
+def hybrid_search(user_question: str, n_results: int, db_target="docs", config: SearchConfig = None):
     """
     Гибридный поиск BM25 + векторный
     mode:
@@ -79,6 +115,7 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
      "bm25" - только текстовый поиск
     По умолчанию - RRF
     Используется реранкер
+    Возвращает rerank_k кандидатов
     """
 
     collection = collection_docs if db_target == "docs" else collection_code
@@ -87,7 +124,7 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
     vec_ids, vec_docs, vec_meta, vec_dists = [], [], [], []
     bm_ids, bm_docs, bm_meta, bm_scores = [], [], [], []
 
-    if mode != "bm25":
+    if config.mode != "bm25":
     # Векторный поиск
         query_vector = embedder.encode(user_question).tolist()
         vector_results = collection.query(
@@ -96,7 +133,7 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
         )
         vec_ids, vec_docs, vec_meta, vec_dists = vector_results['ids'][0], vector_results['documents'][0], vector_results['metadatas'][0], vector_results['distances'][0]
 
-    if mode != "vector":
+    if config.mode != "vector":
     # поиск BM25
         words_query = re.findall(r'\w+', user_question.lower()) #вопрос пользователя по словам
         bm25_all_scores = target_bm_model.get_scores(words_query)
@@ -107,7 +144,7 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
         bm_meta = [target_bm_meta[i] for i in bm25_results]
         bm_scores = [bm25_all_scores[i] for i in bm25_results]
 
-    match mode:
+    match config.mode:
         case "concatenate":
             all_ids = list(chain.from_iterable(zip(vec_ids, bm_ids)))
         case "rrf":
@@ -119,7 +156,7 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
         case "bm25":
             all_ids = bm_ids
         case _:
-            raise ValueError(f"Неизвестный способ объединения {mode}")
+            raise ValueError(f"Неизвестный способ объединения {config.mode}")
 
     all_docs = {}
     all_meta = {}
@@ -140,33 +177,43 @@ def hybrid_search(user_question: str, n_results: int, mode="rrf", use_reranker=T
 
     if not unique_docs:
         return []
-
-    if not use_reranker:
-        results = [(unique_docs[i], unique_meta[i]) for i in range(min(top_k, len(unique_docs[:rerank_k])))]
-    else:
-        rerank_docs = unique_docs[:rerank_k]
-        rerank_meta = unique_meta[:rerank_k]
-
-        pairs = [[user_question, doc] for doc in rerank_docs]
-        scores = reranker.predict(pairs)
-
-        reranked_results = np.argsort(-np.array(scores))[:top_k]
-        if score_threshold is not None:
-            results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results if scores[i] >= score_threshold]
-        else:
-            results = [(rerank_docs[i], rerank_meta[i]) for i in reranked_results]
+    results = list(zip(unique_docs[:config.rerank_k], unique_meta[:config.rerank_k]))
     return results
 
-def routing(user_question: str, mode="rrf", use_reranker=True, score_threshold=None, top_k=8, rerank_k=20, use_router=True):
-    """Маршрут и отправка в поиск"""
-    documentation = []
-    try:
-        route = get_route(user_question) if use_router else "BOTH"
 
-        if route == "DOCS" or route == "BOTH":
-            documentation.extend(hybrid_search(user_question, n_results=25, mode=mode, use_reranker=use_reranker, score_threshold=score_threshold, top_k=8, rerank_k=20, db_target="docs"))
-        if route == "CODE" or route == "BOTH":
-            documentation.extend(hybrid_search(user_question, n_results=15, mode=mode,use_reranker=use_reranker, score_threshold=score_threshold, top_k=top_k, rerank_k=rerank_k, db_target="code"))
+def routing(user_question: str, config: SearchConfig = None):
+    """Создание альтернативных вопросов, маршрутизация и отправка в поиск, связывает hybrid_search() и rerank()"""
+    if config is None:
+        config = SearchConfig()
+
+    all_docs = []
+    uniq_docs = set()
+    documentation = []
+
+    try:
+        if config.multi_query:
+            all_queries = multi_query(user_question)
+            print(f"Альтернативные вопросы: {all_queries}")
+        else:
+            all_queries = [user_question]
+
+        route = get_route(user_question) if config.use_router else "BOTH"
+        for q in all_queries:
+            temp_docs = []
+
+            if route in ["DOCS", "BOTH"]:
+                temp_docs.extend(hybrid_search(q, n_results=25, config=config, db_target="docs"))
+
+            if route in ["CODE", "BOTH"]:
+                temp_docs.extend(hybrid_search(q, n_results=25, config=config, db_target="code"))
+
+            for chunk, meta in temp_docs:
+                if chunk not in uniq_docs:
+                    uniq_docs.add(chunk)
+                    all_docs.append((chunk, meta))
+
+        documentation = rerank(user_question, all_docs, config=config) if config.use_reranker else all_docs[:config.top_k]
+
     except Exception as e:
         print(f"Ошибка маршрутизации: {e}")
         
@@ -219,6 +266,7 @@ def rag_query(user_question: str, history: list):
     except Exception as e:
         print(f"Ошибка выполнения RAG-пайплайна: {e}")
         return "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте еще раз."
+
 
 if __name__ == "__main__":
     gr.ChatInterface(
