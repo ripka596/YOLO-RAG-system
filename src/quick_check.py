@@ -54,7 +54,7 @@ for name, cfg in configs:
 
 results = {}
 for name, cfg in configs:
-    recalls, rrs, counts, times = [], [], [], []
+    recalls, rrs, counts, times, recalls8, rrs8 = [], [], [], [], [], []
 
     for item in dataset:
         start = time.perf_counter()
@@ -64,11 +64,16 @@ for name, cfg in configs:
         recall, rr = calc_metrics(chunks, item["ground_truth"])
         recalls.append(recall)
         rrs.append(rr)
+        recall8, rr8 = calc_metrics(chunks, item["ground_truth"], k=8)
+        recalls8.append(recall8)
+        rrs8.append(rr8)
         counts.append(len(chunks))
 
     results[name] = {
         "Recall@5": round(sum(recalls) / len(recalls), 3),
-        "MRR": round(sum(rrs) / len(rrs), 3),
+        "MRR@5": round(sum(rrs) / len(rrs), 3),
+        "Recall@8": round(sum(recalls8) / len(recalls8), 3),
+        "MRR@8": round(sum(rrs8) / len(rrs8), 3),
         "Avg chunks": round(sum(counts) / len(counts), 1),
         "Latency (s)": round(sum(times) / len(times), 2),
     }
