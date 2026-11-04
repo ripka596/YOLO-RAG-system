@@ -193,7 +193,9 @@ def routing(user_question: str, config: SearchConfig = None):
     try:
         if config.multi_query:
             all_queries = multi_query(user_question)
-            print(f"Альтернативные вопросы: {all_queries}")
+            print(f"Альтернативные вопросы:\n")
+            for i, question in enumerate(all_queries):
+                print(f"{i + 1}. {question}")
         else:
             all_queries = [user_question]
 
