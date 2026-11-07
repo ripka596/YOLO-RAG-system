@@ -40,19 +40,35 @@ def ingest_code():
     chunks = []
     for chunk in raw_chunks:
         text = chunk["text"]
+        meta = chunk["metadata"]
         if len(text) < 4000:
             chunks.append(chunk)
         else:
             sub_texts = code_splitter.split_text(text)
+
+            start_line = meta["start_line"]
+
             for i, sub_text in enumerate(sub_texts):
-                node_type = chunk["metadata"]["node_type"]
-                entity_name = chunk["metadata"]["entity_name"]
-                content = f"// [Part {i+1}/{len(sub_texts)}] of {node_type} '{entity_name}':\n"
+                node_type = meta["node_type"]
+                entity_name = meta["entity_name"]
+                parent_class = meta.get("parent_class")
+
+                parent = f" of class ' {parent_class}'" if parent_class else ""
+                content = f"// [Part {i+1}/{len(sub_texts)}] of {node_type} '{entity_name}'{parent}:\n"
+
+                lines = sub_text.count('\n')
+                end_line = start_line + lines
+
+                new_meta = meta.copy()
+                new_meta["start_line"] = start_line
+                new_meta["end_line"] = end_line
 
                 chunks.append({
                     "text": content + sub_text,
-                    "metadata": chunk["metadata"]
+                    "metadata": new_meta
                 })
+
+                start_line = end_line - 6
 
     documents = [chunk["text"] for chunk in chunks]
     metadatas = [chunk["metadata"] for chunk in chunks]

@@ -1,182 +1,182 @@
 {
-  "Какие версии программного обеспечения и оборудования использовались для валидации измерений производительности Ultralytics Platform на целевых устройствах Jetson?": [
-    "Какие версии программного обеспечения и оборудования использовались для валидации измерений производительности Ultralytics Platform на целевых устройствах Jetson?",
-    "Ultralytics Platform validation performance Jetson hardware software versions",
-    "ultralytics platform jetson device validation benchmarks software stack",
-    "yolo platform jetson nvidia gpu validation test results software version"
+  "Какие параметры окружения использовались для валидационных измерений, представленных в документе?": [
+    "Какие параметры окружения использовались для валидационных измерений, представленных в документе?",
+    "environment parameters used for validation measurements in document",
+    "environment variables validation metrics paper",
+    "what environment settings were used for validation results"
   ],
-  "Как выполнить валидацию сжатой контрольной точки (checkpoint) перед компиляцией с использованием SpongeKit?": [
-    "Как выполнить валидацию сжатой контрольной точки (checkpoint) перед компиляцией с использованием SpongeKit?",
-    "spongekit validate compressed checkpoint before compile",
-    "spongekit check compressed model checkpoint integrity",
-    "spongekit load compressed checkpoint validation guide"
-  ],
-  "Какие рекомендации по размеру батча (batch size) даны для модели YOLO26n?": [
-    "Какие рекомендации по размеру батча (batch size) даны для модели YOLO26n?",
-    "yolo26n batch size recommendations",
-    "best batch size for yolo26n model",
-    "ultralytics yolo26n training batch size guide"
+  "Какой размер модели YOLO26x рекомендуется для серверного развертывания и каков оптимальный размер батча?": [
+    "Какой размер модели YOLO26x рекомендуется для серверного развертывания и каков оптимальный размер батча?",
+    "recommended YOLO26x model size for server deployment and optimal batch size",
+    "YOLO26x model size server inference batch size comparison",
+    "yolo26x model architecture server deployment batch size settings"
   ],
   "Где можно найти подробные бенчмарки производительности для различных конфигураций оборудования?": [
     "Где можно найти подробные бенчмарки производительности для различных конфигураций оборудования?",
-    "yolo performance benchmarks hardware configurations",
-    "ultralytics model speed benchmarks cpu gpu",
-    "yolo inference latency benchmarks different devices"
+    "yolo benchmark performance hardware configurations",
+    "ultralytics model benchmarking guide cpu gpu",
+    "yolo speed accuracy comparison different devices"
   ],
-  "Какая страница содержит ссылку на исходный код библиотеки Ultralytics для получения метаданных репозитория Git?": [
-    "Какая страница содержит ссылку на исходный код библиотеки Ultralytics для получения метаданных репозитория Git?",
-    "ultralytics git repository metadata readme page",
-    "where to find ultralytics source code git metadata",
-    "ultralytics github repo metadata documentation"
+  "Какова цель модуля `ultralytics/utils/git.py`?": [
+    "Какова цель модуля `ultralytics/utils/git.py`?",
+    "ultralytics utils git.py purpose",
+    "ultralytics utils git.py function",
+    "ultralytics utils git.py module description"
   ],
-  "Как в примере 'Inference Loop (Simple OpenCV fallback)' загружается видеофайл и обрабатывается каждый кадр с использованием модели YOLO?": [
-    "Как в примере 'Inference Loop (Simple OpenCV fallback)' загружается видеофайл и обрабатывается каждый кадр с использованием модели YOLO?",
-    "ultralytics inference loop opencv video file frame processing",
-    "yolo inference opencv video stream fallback example",
-    "how to load video and process frames with yolo inference opencv"
+  "Каким образом обрабатывается входной кадр видео в простой петле вывода (Inference Loop), если используется модель YOLO?": [
+    "Каким образом обрабатывается входной кадр видео в простой петле вывода (Inference Loop), если используется модель YOLO?",
+    "yolo inference loop video frame processing pipeline",
+    "how yolo handles input video frame in inference loop",
+    "ultralytics yolo inference video frame preprocessing steps"
   ],
-  "Какие задачи (task types) поддерживает платформа Ultralytics?": [
-    "Какие задачи (task types) поддерживает платформа Ultralytics?",
-    "ultralytics supported task types detection segmentation pose estimation",
-    "Ultralytics platform capabilities task list",
-    "yolo tasks supported ultralytics documentation"
+  "Как использовать модель Ultralytics YOLO26 для выполнения вывода (inference) на сервере?": [
+    "Как использовать модель Ultralytics YOLO26 для выполнения вывода (inference) на сервере?",
+    "ultralytics yolo26 model inference server run predict",
+    "yolo26 inference on server ultralytics deployment guide",
+    "running yolo26 model for prediction in headless server environment"
   ],
-  "Как использовать модель Ultralytics YOLO26 для выполнения вывода на сервере?": [
-    "Как использовать модель Ultralytics YOLO26 для выполнения вывода на сервере?",
-    "ultralytics yolo26 server inference run",
-    "yolo26 export onnx server deployment",
-    "how to run ultralytics yolo26 model on remote server"
+  "Какой формат файла используется для хранения данных об одном изображении в YOLO?": [
+    "Какой формат файла используется для хранения данных об одном изображении в YOLO?",
+    "yolo image format single image storage",
+    "yolo dataset image file format",
+    "yolo train data format image"
   ],
-  "Какие типы задач компьютерного зрения поддерживает формат YOLO?": [
-    "Какие типы задач компьютерного зрения поддерживает формат YOLO?",
-    "yolo object detection segmentation classification tasks",
-    "ultralytics supported detection segmentation pose estimation tasks",
-    "yolo capabilities object detection instance segmentation semantic segmentation"
-  ],
-  "Как установить пакет ClearML через pip для интеграции с YOLOv5?": [
-    "Как установить пакет ClearML через pip для интеграции с YOLOv5?",
-    "pip install clearml ultralytics yolo install clearml integration",
-    "ClearML pip installation YOLOv5 integration guide",
-    "how to install clearml package via pip for YOLOv5 workflow"
+  "Как установить пакет ClearML через pip, если его еще не установлено?": [
+    "Как установить пакет ClearML через pip, если его еще не установлено?",
+    "pip install clearml",
+    "clearml installation pip",
+    "how to install clearml package via pip"
   ],
   "Как установить пакет Ultralytics?": [
     "Как установить пакет Ultralytics?",
     "pip install ultralytics",
-    "Ultralytics installation guide",
-    "ultralytics pip install python package"
+    "Ultralytics package installation guide",
+    "yolo install pip"
   ],
   "Какие разделы доступны в боковом меню приложения?": [
     "Какие разделы доступны в боковом меню приложения?",
-    "ultralytics sidebar menu sections",
-    "yolo app navigation menu items",
-    "ultralytics interface sidebar layout"
+    "sidebar menu sections ultralytics app",
+    "yolo app sidebar navigation items",
+    "ultralytics app menu structure"
   ],
-  "Какую библиотеку необходимо импортировать для выполнения вывода на изображение, открытое с помощью Python Imaging Library (PIL)?": [
-    "Какую библиотеку необходимо импортировать для выполнения вывода на изображение, открытое с помощью Python Imaging Library (PIL)?",
-    "import draw_image_pil ultralytics yolo",
-    "ultralytics yolo draw image opencv cv2",
-    "yolo draw on image pil import"
+  "Какие вычислительные затраты (время на GPU) требуются для выполнения квантования с использованием методов пост-обучения (PTQ), GPTQ и квантования с осознанием обучения (QAT)?": [
+    "Какие вычислительные затраты (время на GPU) требуются для выполнения квантования с использованием методов пост-обучения (PTQ), GPTQ и квантования с осознанием обучения (QAT)?",
+    "PTQ GPTQ QAT quantization GPU time cost inference latency",
+    "quantization methods PTQ GPTQ QAT computational complexity GPU runtime comparison",
+    "post-training quantization GPTQ quantization aware training GPU time requirements documentation"
   ],
-  "Как выполнить оценку модели YOLO26-Depth на бенчмарке NYU Depth V2 с использованием Python?": [
-    "Как выполнить оценку модели YOLO26-Depth на бенчмарке NYU Depth V2 с использованием Python?",
-    "ultralytics yolo26-depth nyu-depth-v2 python benchmark evaluation",
-    "evaluate yolo26-depth model on nyu-depth-v2 dataset python script",
-    "yolo26-depth nyu-depth-v2 benchmark accuracy python inference"
+  "Как загрузить и запустить предобученную модель YOLO26n для анализа изображения, размещенного по удаленной URL-адресу?": [
+    "Как загрузить и запустить предобученную модель YOLO26n для анализа изображения, размещенного по удаленной URL-адресу?",
+    "ultralytics YOLO26n predict url image",
+    "YOLO26n inference remote image url",
+    "load and run YOLO26n model on remote image URL"
+  ],
+  "Как в Python и через командную строку выполнить валидацию модели YOLO26-Depth на бенчмарке NYU Depth V2?": [
+    "Как в Python и через командную строку выполнить валидацию модели YOLO26-Depth на бенчмарке NYU Depth V2?",
+    "python command line validate yolo26-depth nyu-depth-v2 benchmark",
+    "yolo26-depth validation nyu-depth-v2 python script",
+    "evaluate yolo26-depth model nyu-depth-v2 dataset via terminal"
   ],
   "Можно ли точно воспроизвести опубликованные метрики COCO с помощью выпущенной версии пакета?": [
     "Можно ли точно воспроизвести опубликованные метрики COCO с помощью выпущенной версии пакета?",
     "Can I exactly reproduce published COCO metrics with the released package version",
-    "YOLO COCO metrics reproducibility released version",
-    "How to verify COCO evaluation results match official paper numbers"
+    "YOLO COCO metric reproducibility released version",
+    "ultralytics yolo predict coco validate mAP reproduction"
   ],
-  "Какой минимальный требуемый версия библиотеки PyTorch для экспорта модели в формат MNN?": [
-    "Какой минимальный требуемый версия библиотеки PyTorch для экспорта модели в формат MNN?",
-    "minimum pytorch version mnn export",
-    "pytorch mnn export requirements",
-    "pytorch version needed for mnn model export"
+  "Какой максимальный пропускная способность (throughput) обеспечивает Axelera AI?": [
+    "Какой максимальный пропускная способность (throughput) обеспечивает Axelera AI?",
+    "Axelera AI maximum throughput inference performance",
+    "Axelera AI model throughput benchmark",
+    "Axelera AI inference speed limit"
   ],
-  "Какая архитектура используется в классе LinearPresenceHead для предсказания наличия классов в изображении?": [
-    "Какая архитектура используется в классе LinearPresenceHead для предсказания наличия классов в изображении?",
-    "LinearPresenceHead architecture class detection head",
-    "LinearPresenceHead architecture class presence prediction",
-    "LinearPresenceHead model structure detection head implementation"
+  "Какой формат файлов используется для хранения преобразованных меток после выполнения функции конвертации?": [
+    "Какой формат файлов используется для хранения преобразованных меток после выполнения функции конвертации?",
+    "yolo convert labels format output file",
+    "yolo label conversion result file structure",
+    "yolo labels_to_txt output format"
   ],
-  "Какой слой используется для объединения выходных данных тензоров conv22_cv2_2_2 и conv22_cv3_2_2, и каково значение параметра, указывающего количество каналов для этого объединения?": [
-    "Какой слой используется для объединения выходных данных тензоров conv22_cv2_2_2 и conv22_cv3_2_2, и каково значение параметра, указывающего количество каналов для этого объединения?",
-    "combine output tensors conv22_cv2_2_2 conv22_cv3_2_2 channel parameter value",
-    "YOLO architecture layer merging conv22_cv2_2_2 conv22_cv3_2_2 channels",
-    "how to merge conv22_cv2_2_2 and conv22_cv3_2_2 tensor outputs channel count"
+  "Какие параметры принимаются в методе __init__ класса ConvNeXt Block и какова их роль?": [
+    "Какие параметры принимаются в методе __init__ класса ConvNeXt Block и какова их роль?",
+    "ConvNeXtBlock __init__ parameters role",
+    "convnext block initializer args description",
+    "ConvNeXtBlock init method documentation parameters"
   ],
-  "Каким образом реализована защита от одновременных запусков конвертации одного и того же файла, чтобы избежать конфликтов при записи?": [
-    "Каким образом реализована защита от одновременных запусков конвертации одного и того же файла, чтобы избежать конфликтов при записи?",
-    "yolo convert format lock file mechanism",
-    "how to prevent concurrent conversion of same file in ultralytics",
-    "ultralytics convert format file locking implementation"
+  "Какие операции применяются в методе forward для трансформации входного тензора?": [
+    "Какие операции применяются в методе forward для трансформации входного тензора?",
+    "forward pass operations input tensor transformation yolo",
+    "yolo model forward method tensor operations",
+    "yolo forward pass layers input tensor processing"
   ],
-  "Какой метод используется в классе SwiGLUFFN для применения трансформации SwiGLU к входным признакам?": [
-    "Какой метод используется в классе SwiGLUFFN для применения трансформации SwiGLU к входным признакам?",
-    "SwiGLUFFN implementation SwiGLU transformation input features",
-    "swiglu activation function swiglu_ffn ultralytics",
-    "swiglu_ffn layer mechanism swiglu transform inputs"
+  "Как вычисляется выходной тензор в прямом проходе (forward pass) слоя A2C2f, если параметм gamma не равен None?": [
+    "Как вычисляется выходной тензор в прямом проходе (forward pass) слоя A2C2f, если параметм gamma не равен None?",
+    "A2C2f forward pass output tensor calculation gamma not None",
+    "A2C2f layer forward gamma parameter tensor computation",
+    "A2C2f forward pass gamma non-None output formula"
   ],
-  "Какие аргументы принимаются в методе train() для настройки процесса обучения модели, включая количество эпох, размер батча и устройство?": [
-    "Какие аргументы принимаются в методе train() для настройки процесса обучения модели, включая количество эпох, размер батча и устройство?",
-    "ultralytics model.train data epochs batch device",
-    "yolo train method arguments epochs batch_size device",
-    "yolo train configuration epochs batch device"
+  "Как выполняется прямой проход (forward pass) в слое нормализации 2D?": [
+    "Как выполняется прямой проход (forward pass) в слое нормализации 2D?",
+    "2d_layer_norm forward pass implementation",
+    "how 2d_layer_norm computes forward output",
+    "ultralytics 2d_layer_norm forward pass"
   ],
-  "Какие параметры используются для определения ширины (width) и глубины (depth) в операциях C2F (convolutional block with skip connection) в заданном коде?": [
-    "Какие параметры используются для определения ширины (width) и глубины (depth) в операциях C2F (convolutional block with skip connection) в заданном коде?",
-    "C2F block width depth parameters ultralytics code",
-    "C2F conv block width depth expansion ratio implementation",
-    "how to set width and depth in C2F module YOLOv8 source"
+  "Как инициализируется модель дистилляции, если передан путь к чекпоинту учителя в виде строки или объекта Path, и как обрабатывается несоответствие количества каналов между учителем и учеником?": [
+    "Как инициализируется модель дистилляции, если передан путь к чекпоинту учителя в виде строки или объекта Path, и как обрабатывается несоответствие количества каналов между учителем и учеником?",
+    "distillation model initialization teacher_path string path object channel mismatch handling",
+    "how to initialize distillation model with teacher checkpoint string or Path object and resolve channel dimension differences",
+    "distillation model init teacher checkpoint path string Path object channel mismatch error resolution"
   ],
-  "Какой размер ширины (в пикселях) используется для конволюционного слоя model.29?": [
-    "Какой размер ширины (в пикселях) используется для конволюционного слоя model.29?",
-    "model.29 conv layer width pixels",
-    "YOLOv8 model.29 convolution kernel size",
-    "ultralytics model architecture layer 29 input dimensions"
+  "Какой метод используется в классе YOLO для проведения гиперпараметрической настройки модели с возможностью использования Ray Tune?": [
+    "Какой метод используется в классе YOLO для проведения гиперпараметрической настройки модели с возможностью использования Ray Tune?",
+    "yolo hyperparameter tuning ray tune",
+    "ultralytics model.hyperparams ray tune",
+    "how to use ray tune with yolo model hyperparameter optimization"
   ],
-  "Каков максимальный номер объектов (max_obj_num), который может отслеживать SAM2DynamicInteractivePredictor по умолчанию?": [
-    "Каков максимальный номер объектов (max_obj_num), который может отслеживать SAM2DynamicInteractivePredictor по умолчанию?",
-    "SAM2DynamicInteractivePredictor max_obj_num default limit",
-    "SAM2DynamicInteractivePredictor maximum number of objects tracking default",
-    "sam2dynamicinteractivepredictor max_obj_num default value documentation"
+  "Какие режимы работы реализованы в классе CopyPaste?": [
+    "Какие режимы работы реализованы в классе CopyPaste?",
+    "CopyPaste class modes implementation",
+    "CopyPaste class available modes",
+    "CopyPaste augmentation modes documentation"
   ],
-  "Как обрабатывается ситуация, когда в сегментации объекта обнаружено более одного полигона?": [
-    "Как обрабатывается ситуация, когда в сегментации объекта обнаружено более одного полигона?",
-    "yolo segmentation multiple polygons handling",
-    "ultralytics mask merging strategy",
-    "yolo detect vs segment polygon overlap resolution"
+  "Какой метод используется для конвертации всех тензоров в объекте Results в массивы NumPy?": [
+    "Какой метод используется для конвертации всех тензоров в объекте Results в массивы NumPy?",
+    "ultralytics results tensors numpy array conversion method",
+    "how to convert results object tensors to numpy arrays",
+    "results object tensor to numpy array conversion ultralytics"
   ],
-  "Какой формат вывода данных (DataFrame) возвращает функция benchmark?": [
-    "Какой формат вывода данных (DataFrame) возвращает функция benchmark?",
-    "benchmark output format dataframe",
-    "benchmark function return value pandas",
-    "ultralytics benchmark result structure"
+  "Какие базовые статистические показатели и количество отобранных изображений отображаются в тексте на графике распределения глубины?": [
+    "Какие базовые статистические показатели и количество отобранных изображений отображаются в тексте на графике распределения глубины?",
+    "what statistics and image count are displayed on the depth histogram text",
+    "depth distribution plot statistics and sample count",
+    "how to read depth histogram text statistics and image numbers"
   ],
-  "Какой метод используется для инициализации состояния предсказателя (inference state) в классе SAM2VideoPredictor?": [
-    "Какой метод используется для инициализации состояния предсказателя (inference state) в классе SAM2VideoPredictor?",
-    "SAM2VideoPredictor inference state initialization method",
-    "how to initialize inference state in SAM2VideoPredictor class",
-    "SAM2VideoPredictor __init__ inference_state setup"
+  "Как определяется значение world_size в классе BaseTrainer, если используемое устройство не является CPU или MPS?": [
+    "Как определяется значение world_size в классе BaseTrainer, если используемое устройство не является CPU или MPS?",
+    "BaseTrainer world_size determination non_cpu_non_mps device",
+    "how is world_size set in BaseTrainer when device is not CPU or MPS",
+    "BaseTrainer world_size logic gpu cuda tpu device detection"
   ],
-  "Какой порядок перестановок применяется в функции do_pool для обработки пространственных измерений тензора перед и после применения пулинга?": [
-    "Какой порядок перестановок применяется в функции do_pool для обработки пространственных измерений тензора перед и после применения пулинга?",
-    "do_pool tensor spatial dimensions permutation order before after pooling",
-    "YOLO do_pool function spatial permutation sequence",
-    "how do_pool rearranges tensor spatial dimensions pre and post pooling"
+  "Как происходит сохранение модели CoreML, если указан параметр output_file?": [
+    "Как происходит сохранение модели CoreML, если указан параметр output_file?",
+    "coreml model.save output_file path",
+    "coreml export output_file parameter behavior",
+    "how to save coreml model with output_file argument"
   ],
-  "Какой режим интерполяции используется для слоя upsample10?": [
-    "Какой режим интерполяции используется для слоя upsample10?",
-    "upsample10 interpolation mode",
-    "what is the interpolation method used in upsample10 layer",
-    "yolo upsample10 interpolation type documentation"
+  "Как определяется глубина модели (depth) в методе set_layer_lr_decay?": [
+    "Как определяется глубина модели (depth) в методе set_layer_lr_decay?",
+    "set_layer_lr_decay depth definition",
+    "how to determine model depth in set_layer_lr_decay",
+    "ultralytics set_layer_lr_decay depth parameter explanation"
   ],
-  "Как формируется новый размер (shape) частотного тензора после его трансформации для совместного распространения (broadcasting) с входным тензором?": [
-    "Как формируется новый размер (shape) частотного тензора после его трансформации для совместного распространения (broadcasting) с входным тензором?",
-    "how is new frequency tensor shape calculated after transform for broadcasting with input tensor",
-    "broadcasting rules frequency tensor shape after transform ultralytics",
-    "broadcasting compatibility frequency tensor shape post-transformation"
+  "Какие слои используются в функции YOLOV8 DETECT для обработки тензоров после перемешивания (shuffle) и как они настраиваются?": [
+    "Какие слои используются в функции YOLOV8 DETECT для обработки тензоров после перемешивания (shuffle) и как они настраиваются?",
+    "yolov8 detect post_shuffle tensor layers configuration",
+    "yolov8 detect head architecture after shuffle layers",
+    "yolov8 detect model layers processing shuffled tensors"
+  ],
+  "Какие значения устанавливаются для атрибутов task и plots в методе __init__ класса FastSAMValidator для предотвращения ошибок?": [
+    "Какие значения устанавливаются для атрибутов task и plots в методе __init__ класса FastSAMValidator для предотвращения ошибок?",
+    "FastSAMValidator __init__ task plots attributes initialization values",
+    "FastSAMValidator task plots error prevention configuration",
+    "FastSAMValidator init task plots default settings documentation"
   ]
 }

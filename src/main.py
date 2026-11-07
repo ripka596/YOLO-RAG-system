@@ -1,5 +1,4 @@
-import code
-import re, pickle, ollama, chromadb, torch, gradio as gr, numpy as np
+import pickle, ollama, chromadb, torch, gradio as gr, numpy as np
 
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from itertools import chain
@@ -8,7 +7,7 @@ from typing import Optional
 from dataclasses import dataclass, replace
 from multi_query import multi_query
 from router import get_route
-from utils import tokenize_bm25, rrf
+from utils import tokenize_bm25, rrf_docs
 
 
 CHROMA_DB_DIR = "chroma_db"
@@ -48,17 +47,17 @@ def get_bm25(db_type):
     return data['bm25'], data['ids'], data['docs'], data['meta'] 
 
 
-# def rrf(vec_ids, bm_ids):
-#     """
-#     RRF объединение результатов
-#     """
-#     k = 60 #константа сглаживания
-#     scores = {}
-#     for rank, doc_id in enumerate(vec_ids):
-#         scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
-#     for rank, doc_id in enumerate(bm_ids):
-#         scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
-#     return sorted(scores.keys(), key=scores.get, reverse=True)
+def rrf(vec_ids, bm_ids):
+    """
+    RRF объединение результатов
+    """
+    k = 60 #константа сглаживания
+    scores = {}
+    for rank, doc_id in enumerate(vec_ids):
+        scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
+    for rank, doc_id in enumerate(bm_ids):
+        scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
+    return sorted(scores.keys(), key=scores.get, reverse=True)
 
 
 def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
@@ -90,6 +89,9 @@ def rerank(user_question: str, docs_metas: list, config: SearchConfig = None):
     """
     Реранкинг результатов поиска, возвращает top_k лучших результатов или фильтрует по порогу score_threshold
     """
+    if config is None:
+        config = SearchConfig()
+
     if not docs_metas:
         return []
     docs, metas = zip(*docs_metas)
@@ -199,13 +201,14 @@ def routing(user_question: str, config: SearchConfig = None):
     route = get_route(user_question) if config.use_router else "BOTH"
     results = []
     for q in all_queries:
+
         if route in ["DOCS", "BOTH"]:
             results.append(hybrid_search(q, n_results=25, config=config, db_target="docs"))
 
         if route in ["CODE", "BOTH"]:
-            results.extend(hybrid_search(q, n_results=25, config=config, db_target="code"))
+            results.append(hybrid_search(q, n_results=25, config=config, db_target="code"))
 
-    merged_results = rrf(*results)
+    merged_results = rrf_docs(*results)
 
     documentation = rerank(user_question, merged_results[:config.rerank_k], config=config) if config.use_reranker else merged_results[:config.top_k]
 

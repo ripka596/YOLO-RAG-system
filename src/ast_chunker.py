@@ -56,10 +56,16 @@ def parse_code(file_path: Path):
     chunks = []
     target_types = TARGETS[lang]
 
-    def traverse(node):
+    def traverse(node, parent_class = None):
         if node.type in target_types:
+
             chunk_text = source_bytes[node.start_byte : node.end_byte].decode("utf-8", errors="ignore")
+
             name = extract_node(node, source_bytes)
+
+            is_class = node.type in {"class_definition", "class_specifier", "struct_specifier"}
+
+            parent = parent_class if (not is_class and parent_class) else None
 
             chunks.append({
                 "text": chunk_text,
@@ -70,20 +76,31 @@ def parse_code(file_path: Path):
                     "language": lang,
                     "node_type": node.type,
                     "entity_name": name,
+                    "parent_class": parent if parent is not None else "",
                     "start_line": node.start_point[0] + 1,
                     "end_line": node.end_point[0] + 1,
                 }
             })
-            return
 
+            if is_class:
+                next_parent = name
+            else:
+                next_parent = parent_class
+
+            for child in node.children:
+                traverse(child, parent_class=next_parent)
+            return
+        
         for child in node.children:
-            traverse(child)
+            traverse(child, parent_class=parent_class)
 
     traverse(root_node)
     return chunks
 
 if __name__ == "__main__":
-    test = Path("data/code_cpp/yolov8_cls.cpp")
+    test = Path("data/code_py/models/yolo/model.py")
     if test.exists():
         chunks = parse_code(test)
         print(f"Извлечено {len(chunks)} чанков из {test.name}")
+        for c in chunks[:5]:
+            print(f"[{c['metadata']['node_type']}] {c['metadata']['entity_name']} (Parent: {c['metadata']['parent_class']})")

@@ -56,7 +56,7 @@ def create_bm25_index(ids, documents, metadatas, index_path):
         
     print(f"BM25 индекс сохранен в {index_path}")
 
-def rrf(*lcand, k=60):
+def rrf_docs(*lcand, k=60):
     """
     RRF объединение результатов
     """
@@ -65,9 +65,10 @@ def rrf(*lcand, k=60):
 
     for cand in lcand:
         for rank, (chunk, metadata) in enumerate(cand):
-            if chunk not in scores:
-                scores[chunk] = 0
-                meta[chunk] = metadata
-            scores[chunk] += 1 / (k + rank + 1)
+            key = (chunk, metadata.get('source', ''))
+            if key not in scores:
+                scores[key] = 0
+                meta[key] = (chunk, metadata)
+            scores[key] += 1 / (k + rank + 1)
             
-    return [(chunk, meta[chunk]) for chunk in sorted(scores.keys(), key=scores.get, reverse=True)]
+    return [meta[key] for key in sorted(scores.keys(), key=scores.get, reverse=True)]
