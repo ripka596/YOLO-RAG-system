@@ -1,3 +1,4 @@
+import code
 import re, pickle, ollama, chromadb, torch, gradio as gr, numpy as np
 
 from sentence_transformers import SentenceTransformer, CrossEncoder
@@ -7,6 +8,7 @@ from typing import Optional
 from dataclasses import dataclass, replace
 from multi_query import multi_query
 from router import get_route
+from utils import tokenize_bm25, rrf
 
 
 CHROMA_DB_DIR = "chroma_db"
@@ -31,7 +33,7 @@ class SearchConfig:
 client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
 
 collection_docs = client.get_collection(name="YOLOdocs")
-with open("bm25/bm25_index.pkl", "rb") as f:
+with open("bm25/bm25_docs.pkl", "rb") as f:
     bm25_data_docs = pickle.load(f)
 
 collection_code = client.get_collection(name="YOLOcodes")
@@ -46,17 +48,17 @@ def get_bm25(db_type):
     return data['bm25'], data['ids'], data['docs'], data['meta'] 
 
 
-def rrf(vec_ids, bm_ids):
-    """
-    RRF объединение результатов
-    """
-    k = 60 #константа сглаживания
-    scores = {}
-    for rank, doc_id in enumerate(vec_ids):
-        scores[doc_id] = scores.get(doc_id, 0) + 1 / (k+ rank + 1)
-    for rank, doc_id in enumerate(bm_ids):
-        scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
-    return sorted(scores.keys(), key=scores.get, reverse=True)
+# def rrf(vec_ids, bm_ids):
+#     """
+#     RRF объединение результатов
+#     """
+#     k = 60 #константа сглаживания
+#     scores = {}
+#     for rank, doc_id in enumerate(vec_ids):
+#         scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
+#     for rank, doc_id in enumerate(bm_ids):
+#         scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank + 1)
+#     return sorted(scores.keys(), key=scores.get, reverse=True)
 
 
 def score_fusion(vec_ids, vec_dists, bm_ids, bm_scores):
@@ -135,7 +137,7 @@ def hybrid_search(user_question: str, n_results: int, db_target="docs", config: 
 
     if config.mode != "vector":
     # поиск BM25
-        words_query = re.findall(r'\w+', user_question.lower()) #вопрос пользователя по словам
+        words_query = tokenize_bm25(user_question) #вопрос пользователя по словам
         bm25_all_scores = target_bm_model.get_scores(words_query)
         bm25_results = np.argsort(-bm25_all_scores)[:n_results]
 
@@ -186,39 +188,27 @@ def routing(user_question: str, config: SearchConfig = None):
     if config is None:
         config = SearchConfig()
 
-    all_docs = []
-    uniq_docs = set()
-    documentation = []
+    if config.multi_query:
+        all_queries = multi_query(user_question)
+        print(f"\nАльтернативные вопросы:")
+        for i, question in enumerate(all_queries):
+            print(f"{i + 1}. {question}")
+    else:
+        all_queries = [user_question]
 
-    try:
-        if config.multi_query:
-            all_queries = multi_query(user_question)
-            print(f"Альтернативные вопросы:\n")
-            for i, question in enumerate(all_queries):
-                print(f"{i + 1}. {question}")
-        else:
-            all_queries = [user_question]
+    route = get_route(user_question) if config.use_router else "BOTH"
+    results = []
+    for q in all_queries:
+        if route in ["DOCS", "BOTH"]:
+            results.append(hybrid_search(q, n_results=25, config=config, db_target="docs"))
 
-        route = get_route(user_question) if config.use_router else "BOTH"
-        for q in all_queries:
-            temp_docs = []
+        if route in ["CODE", "BOTH"]:
+            results.extend(hybrid_search(q, n_results=25, config=config, db_target="code"))
 
-            if route in ["DOCS", "BOTH"]:
-                temp_docs.extend(hybrid_search(q, n_results=25, config=config, db_target="docs"))
+    merged_results = rrf(*results)
 
-            if route in ["CODE", "BOTH"]:
-                temp_docs.extend(hybrid_search(q, n_results=25, config=config, db_target="code"))
+    documentation = rerank(user_question, merged_results[:config.rerank_k], config=config) if config.use_reranker else merged_results[:config.top_k]
 
-            for chunk, meta in temp_docs:
-                if chunk not in uniq_docs:
-                    uniq_docs.add(chunk)
-                    all_docs.append((chunk, meta))
-
-        documentation = rerank(user_question, all_docs, config=config) if config.use_reranker else all_docs[:config.top_k]
-
-    except Exception as e:
-        print(f"Ошибка маршрутизации: {e}")
-        
     return documentation
 
     

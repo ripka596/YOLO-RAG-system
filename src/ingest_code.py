@@ -1,9 +1,10 @@
-import pickle, chromadb, torch, os
+import pickle, chromadb, torch, os, re
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 from ast_chunker import parse_code
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from utils import create_bm25_index, upload_to_chromadb
 
 DATA = Path("data")
 CPP_DIR = DATA / "code_cpp"
@@ -11,8 +12,6 @@ PY_DIR = DATA / "code_py"
 DB = "chroma_db"
 CODE_COLLECTION = "YOLOcodes"
 BM25_CODE = "bm25/bm25_code.pkl"
-EMBEDDER = "Qwen/Qwen3-Embedding-0.6B"
-
 
 def collect_chunks():
     all_chunks = []
@@ -25,6 +24,7 @@ def collect_chunks():
             if file_path.is_file():
                 all_chunks.extend(parse_code(file_path))
     return all_chunks
+
 
 def ingest_code():
     raw_chunks = collect_chunks()
@@ -58,38 +58,15 @@ def ingest_code():
     metadatas = [chunk["metadata"] for chunk in chunks]
     ids = [f"code_{i}" for i in range(len(chunks))]
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = SentenceTransformer(EMBEDDER, device=device)
-    embeddings = model.encode(documents, show_progress_bar=True).tolist()
-
     client = chromadb.PersistentClient(path=DB)
     try:
         client.delete_collection(CODE_COLLECTION)
     except Exception:
         pass
-
     collection = client.create_collection(name=CODE_COLLECTION, metadata={"hnsw:space": "cosine"})
 
-    batch_size = 5000
-    for i in range(0, len(documents), batch_size):
-        collection.add(
-            documents=documents[i:i+batch_size],
-            metadatas=metadatas[i:i+batch_size],
-            embeddings=embeddings[i:i+batch_size],
-            ids=ids[i:i+batch_size]
-        )
-
-    tokenized = [doc.lower().split() for doc in documents]
-    bm25 = BM25Okapi(tokenized)
-
-    os.makedirs("bm25", exist_ok=True)
-    with open(BM25_CODE, "wb") as f:
-        pickle.dump({
-            "bm25": bm25,
-            "ids": ids,
-            "docs": documents,
-            "meta": metadatas
-            }, f)
+    upload_to_chromadb(collection, ids, documents, metadatas)
+    create_bm25_index(ids, documents, metadatas, BM25_CODE)
 
 if __name__ == "__main__":
     ingest_code()

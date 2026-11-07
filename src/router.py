@@ -1,6 +1,11 @@
 import json, ollama
+from pydantic import BaseModel
+from typing import Literal
 
 LLM = "qwen3_5:latest"
+
+class Response(BaseModel):
+    route: Literal["DOCS", "CODE", "BOTH"]
 
 def get_route(user_q: str):
     """Классификация запроса:
@@ -28,12 +33,13 @@ def get_route(user_q: str):
                 {"role": "user", "content": f"Вопрос пользователя: {user_q}"}
             ],
             think=False,
-            format="json",
+            format=Response.model_json_schema(),
             options={"temperature": 0.0, "num_predict": 20}
         )
-        result = json.loads(response["message"]["content"])
-        route = result.get("route", "BOTH").upper()
+
+        route = Response.model_validate_json(response["message"]["content"]).model_dump()["route"]
         return route
+    
     except Exception as e:
         print(f"Ошибка внутри роутера: {e}")
         return "BOTH"
