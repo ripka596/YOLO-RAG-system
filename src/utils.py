@@ -72,3 +72,23 @@ def rrf_docs(*lcand, k=60):
             scores[key] += 1 / (k + rank + 1)
             
     return [meta[key] for key in sorted(scores.keys(), key=scores.get, reverse=True)]
+
+def score_k(*lcand, rerank_k):
+    seen = set()
+    results = []
+
+    max_len = max((len(c) for c in lcand), default=0)
+    for i in range(max_len):
+        for cand in lcand:
+            if i < len(cand):
+                chunk, meta = cand[i]
+                key = (chunk, meta.get('source', ''))
+
+                if key not in seen:
+                    seen.add(key)
+                    results.append((chunk, meta))
+
+                if len(results) >= rerank_k:
+                    return results
+
+    return results

@@ -7,7 +7,7 @@ from typing import Optional
 from dataclasses import dataclass, replace
 from multi_query import multi_query
 from router import get_route
-from utils import tokenize_bm25, rrf_docs
+from utils import tokenize_bm25, rrf_docs, score_k
 
 
 CHROMA_DB_DIR = "chroma_db"
@@ -185,7 +185,7 @@ def hybrid_search(user_question: str, n_results: int, db_target="docs", config: 
     return results
 
 
-def routing(user_question: str, config: SearchConfig = None):
+def routing(user_question: str, config: SearchConfig = None, score_fuze = False):
     """Создание альтернативных вопросов, маршрутизация и отправка в поиск, связывает hybrid_search() и rerank()"""
     if config is None:
         config = SearchConfig()
@@ -208,7 +208,13 @@ def routing(user_question: str, config: SearchConfig = None):
         if route in ["CODE", "BOTH"]:
             results.append(hybrid_search(q, n_results=25, config=config, db_target="code"))
 
-    merged_results = rrf_docs(*results)
+    if len(results) == 1:
+        merged_results = results[0]
+    else:
+        if config.mode == "score" and score_fuze:
+            merged_results = score_k(*results, rerank_k=config.rerank_k)
+        else:
+            merged_results = rrf_docs(*results)
 
     documentation = rerank(user_question, merged_results[:config.rerank_k], config=config) if config.use_reranker else merged_results[:config.top_k]
 
