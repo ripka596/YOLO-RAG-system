@@ -7,7 +7,7 @@ from typing import Optional
 from dataclasses import dataclass, replace
 from multi_query import multi_query
 from router import get_route
-from utils import tokenize_bm25, rrf_docs, score_k
+from utils import tokenize_bm25, rrf_docs, rr_docs
 
 
 CHROMA_DB_DIR = "chroma_db"
@@ -192,9 +192,9 @@ def routing(user_question: str, config: SearchConfig = None, score_fuze = False)
 
     if config.multi_query:
         all_queries = multi_query(user_question)
-        print(f"\nАльтернативные вопросы:")
-        for i, question in enumerate(all_queries):
-            print(f"{i + 1}. {question}")
+        #print(f"\nАльтернативные вопросы:")
+        #for i, question in enumerate(all_queries):
+        #    print(f"{i + 1}. {question}")
     else:
         all_queries = [user_question]
 
@@ -211,8 +211,8 @@ def routing(user_question: str, config: SearchConfig = None, score_fuze = False)
     if len(results) == 1:
         merged_results = results[0]
     else:
-        if config.mode == "score" and score_fuze:
-            merged_results = score_k(*results, rerank_k=config.rerank_k)
+        if score_fuze:
+            merged_results = rr_docs(*results, rerank_k=config.rerank_k)
         else:
             merged_results = rrf_docs(*results)
 

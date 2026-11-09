@@ -1,0 +1,8 @@
+﻿,rerank_k=20,rerank_k=20,rerank_k=20,rerank_k=20,rerank_k=40,rerank_k=40,rerank_k=40,rerank_k=40,rerank_k=75,rerank_k=75,rerank_k=75,rerank_k=75
+,router + mq,"router, no mq",no router + mq,"no router, no mq",router + mq,"router, no mq",no router + mq,"no router, no mq",router + mq,"router, no mq",no router + mq,"no router, no mq"
+Recall@5,0.733,0.633,0.767,0.733,0.7,0.667,0.767,0.7,0.7,0.667,0.767,0.733
+MRR@5,0.634,0.558,0.693,0.65,0.619,0.59,0.679,0.623,0.597,0.573,0.663,0.657
+Recall@8,0.733,0.667,0.767,0.733,0.733,0.667,0.833,0.733,0.767,0.7,0.8,0.733
+MRR@8,0.634,0.563,0.693,0.65,0.624,0.59,0.688,0.627,0.606,0.578,0.667,0.657
+Avg chunks,7.2,6.8,6.9,7.0,7.6,7.5,7.5,7.3,7.7,7.6,7.8,7.5
+Latency (s),0.74,0.73,0.93,0.81,1.22,1.33,1.7,1.69,1.71,1.49,2.11,2.19
