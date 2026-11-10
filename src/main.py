@@ -21,12 +21,12 @@ reranker = CrossEncoder(RERANK_MODEL_NAME, device=device)
 
 @dataclass
 class SearchConfig:
-    mode: str = "rrf"  # "concatenate", "rrf", "score", "vector", "bm25"
+    mode: str = "concatenate"  # "concatenate", "rrf", "score", "vector", "bm25"
     use_reranker: bool = True
     score_threshold: Optional[float] = None
     top_k: int = 8
     rerank_k: int = 20
-    use_router: bool = True
+    use_router: bool = False
     multi_query: bool = True
 
 client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
@@ -185,7 +185,7 @@ def hybrid_search(user_question: str, n_results: int, db_target="docs", config: 
     return results
 
 
-def routing(user_question: str, config: SearchConfig = None, score_fuze = False):
+def routing(user_question: str, config: SearchConfig = None, score_fuze = True):
     """Создание альтернативных вопросов, маршрутизация и отправка в поиск, связывает hybrid_search() и rerank()"""
     if config is None:
         config = SearchConfig()
